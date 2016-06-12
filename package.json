@@ -1,0 +1,36 @@
+{
+  "name": "dorita980",
+  "version": "1.0.0",
+  "description": "unofficial iRobot Roomba 980 library sdk",
+  "main": "./lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "_mocha -- $npm_package_config_mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koalazak/dorita980.git"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "chai-as-promised": "^5.2.0",
+    "mocha": "^2.3.4",
+    "semistandard": "^7.0.2"
+  },
+  "keywords": [
+    "unofficial",
+    "iRobot",
+    "Roomba",
+    "980",
+    "library",
+    "sdk"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/koalazak/dorita980/issues"
+  },
+  "homepage": "https://github.com/koalazak/dorita980#readme"
+}
