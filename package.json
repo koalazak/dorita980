@@ -32,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/koalazak/dorita980/issues"
   },
-  "homepage": "https://github.com/koalazak/dorita980#readme"
+  "homepage": "https://github.com/koalazak/dorita980#readme",
+  "dependencies": {
+    "request-promise": "^3.0.0"
+  }
 }
