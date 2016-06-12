@@ -48,6 +48,9 @@ TODO
 
 # API
 
+- `myRobot.getStatus()`
+- `myRobot.accumulatedHistorical()`
+- `myRobot.missionHistory()`
 - `myRobot.clean()`
 - `myRobot.quick()`
 - `myrobot.spot()`
