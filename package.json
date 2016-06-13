@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "unofficial iRobot Roomba 980 library sdk",
   "main": "./lib/index.js",
   "directories": {
@@ -27,7 +27,7 @@
     "library",
     "sdk"
   ],
-  "author": "",
+  "author": "koalazak <zak.tux@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/koalazak/dorita980/issues"
