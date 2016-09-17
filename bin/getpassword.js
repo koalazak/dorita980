@@ -3,13 +3,13 @@
 const request = require('request');
 
 if (!process.argv[2]) {
-  console.log('Use: npm run getpassword <roomba_ip_address>');
+  console.log('Use: npm run getpassword <robot_ip_address>');
   process.exit();
 }
 
 const host = process.argv[2];
 
-console.log('Make sure your Roomba is on the Home Base and powered on (green lights on). Then press and hold the HOME button on your roomba until it plays a series of tones (about 2 seconds). Release the button and your Roomba will flash WIFI light. Then wait and look here...');
+console.log('Make sure your robot is on the Home Base and powered on (green lights on). Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light. Then wait and look here...');
 
 var requestOptions = {
   'method': 'POST',
@@ -28,7 +28,7 @@ var requestOptions = {
 
 function check (rid) {
   if (rid === 120) {
-    console.log('Timeout getting password. Are you following the instructions? You already setup your roomba? Its the Roomba IP correct?');
+    console.log('Timeout getting password. Are you following the instructions? You already setup your robot? Its the robot IP correct?');
     process.exit(1);
   }
 
@@ -36,7 +36,7 @@ function check (rid) {
 
   request(requestOptions, function (error, response, body) {
     if (error) {
-      console.log('Fatal error connecting to roomba. Please verify the IP address and connectivity:', error);
+      console.log('Fatal error connecting to robot. Please verify the IP address and connectivity:', error);
       process.exit(1);
     }
 
