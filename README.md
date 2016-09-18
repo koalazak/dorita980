@@ -90,6 +90,26 @@ myRobotViaLocal.dock().then((response) => {
 });
 ```
 
+### Auto discover IP address for local request:
+
+```javascript
+var dorita980 = require('dorita980');
+
+dorita980.getRobotIP(function (ierr, ip) {
+  if (!ierr) {
+    var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', ip);
+
+    myRobotViaLocal.getMission().then((response) => {
+      console.log(response);
+    }).catch((err) => {
+      console.log(err);
+    });
+  } else {
+    console.log('error looking for robot IP');
+  }
+});
+```
+
 # How it works
 
 ## Cloud
@@ -388,7 +408,6 @@ With this you can draw a map :)
 
 ## TODO
 
-- Im working in a way to obtain the robot IP address automatically.
 - Bit mask to set Cleaning Preferences more easly (without using flags).
 
 ## Author
