@@ -1,7 +1,17 @@
 # dorita980
+[![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
+
 Unofficial iRobot Roomba 980 library (SDK).
 
 With this library you can send commands to your Roomba 980 through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation project.
+
+# Features
+
+- Get your username/password easily
+- Auto discovery robot IP (optional)
+- Cloud API control (from outside your home)
+- Local API control (from your LAN)
+- Simplified Cleaning Preferences settings.
 
 # Install
 
@@ -243,10 +253,10 @@ Response:
 {"ok":null,"id":218}
 ```
 
-#### `getPrefs()`
+#### `getPreferences()`
 ```javascript
 { ok:
-   { flags: 1024,
+   { flags: 1024, // See Cleaning Preferences table.
      lang: 2,
      timezone: 'America/Buenos_Aires',
      name: 'myRobotName' },
@@ -257,7 +267,7 @@ Response:
 
 ```javascript
 var newPreferences = { 
-  flags: 1107, // See Cleaning Preferences table. (im working on a bit mask to simplify this)
+  flags: 1107, // See Cleaning Preferences table.
   lang: 2,
   timezone: 'America/Buenos_Aires',
   name: 'myRobotName'
@@ -340,6 +350,54 @@ With this you can draw a map :)
 {"ok":null,"id":293}
 ```
 
+## Simplifications to set Cleaning Preferences:
+This methods use setPreferences() with the correct `flags` for each setting.
+
+#### `setCarpetBoostAuto()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setCarpetBoostPerformance()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setCarpetBoostEco()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setEdgeCleanOn()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setEdgeCleanOff()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setCleaningPassesOne()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setCleaningPassesTwo()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setAlwaysFinishOn()`
+```javascript
+{"ok":null,"id":293}
+```
+
+#### `setAlwaysFinishOff()`
+```javascript
+{"ok":null,"id":293}
+```
+
 ## Cleaning Preferences Flags table
 
 | Carpet Boost | Cleaning Passes | Finish Cleaning when bin is full | Edge Clean | Flags DEC | 
@@ -373,8 +431,6 @@ With this you can draw a map :)
 
 # Cloud API
 
-*(Full Documentation pending...)*
-
 - `myRobotViaCloud.getStatus()`
 - `myRobotViaCloud.accumulatedHistorical()`
 - `myRobotViaCloud.missionHistory()`
@@ -405,10 +461,6 @@ With this you can draw a map :)
 - `myRobotViaCloud.sleep()`
 - `myRobotViaCloud.off()`
 - `myRobotViaCloud.fbeep()`
-
-## TODO
-
-- Bit mask to set Cleaning Preferences more easly (without using flags).
 
 ## Author
 

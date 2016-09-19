@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Unofficial iRobot Roomba 980 library sdk",
   "main": "./index.js",
   "directories": {
