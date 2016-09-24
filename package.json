@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Unofficial iRobot Roomba 980 library sdk",
   "main": "./index.js",
   "directories": {
@@ -29,7 +29,10 @@
     "sdk",
     "robot",
     "local",
-    "cloud"
+    "cloud",
+    "alexa",
+    "vacuum",
+    "cleaner"
   ],
   "author": "koalazak <zak.tux@gmail.com>",
   "license": "ISC",

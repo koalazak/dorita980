@@ -9,7 +9,7 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 
 - Get your username/password easily
 - Auto discovery robot IP (optional)
-- Cloud API control (from outside your home)
+- Cloud API control (from inside or outside your home)
 - Local API control (from your LAN)
 - Simplified Cleaning Preferences settings.
 
@@ -20,7 +20,7 @@ $ npm install dorita980
 ```
 
 # Quick start via Cloud request
-You can control the robot from outside your home
+You can control the robot from inside or outside your home
 
 ```javascript
 var dorita980 = require('dorita980');
@@ -100,7 +100,10 @@ myRobotViaLocal.dock().then((response) => {
 });
 ```
 
-### Auto discover IP address for local request:
+## Auto discover IP address for local request:
+
+If you dont known the robot IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
+This process takes 1 or 2 seconds, so if you known the IP just use it explicity.
 
 ```javascript
 var dorita980 = require('dorita980');
@@ -134,7 +137,7 @@ The library send commands direclty over wifi to your robot. You dont need intern
 # How to get your username/blid and password
 (Needed for Cloud and Local requests)
 
-Download or clone this repo then install, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it)
+Download or clone this repo then install, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use `dorita980.getRobotIP()` method.
 
 ```bash
 $ git clone https://github.com/koalazak/dorita980.git
@@ -143,7 +146,7 @@ $ npm install
 $ npm run getpassword
 ```
 
-Output Example:
+Example Output:
 
 ```
 $ cd dorita980
@@ -164,7 +167,7 @@ Use this credentials in dorita980 lib :)
 
 ## Succesfull response
 
-A successfull response return an object with `ok` property:
+A successfull response return an object with `ok` property and the internal request id:
 
 ```javascript
 { ok: null, id: 2 }
@@ -177,7 +180,7 @@ An error response return an object with `err` property and error number:
 { err: -32600 }
 ```
 
-### Methods
+## Methods
 
 #### `getTime()`
 ```javascript
