@@ -256,14 +256,24 @@ Response:
 {"ok":null,"id":218}
 ```
 
-#### `getPreferences()`
+#### `getPreferences(autoDecodeFlags)`
+
+If `autoDecodeFlags` is `false` the returned object not include `cleaningPreferences` property. Default is `true` so always decode flags.
+
 ```javascript
 { ok:
    { flags: 1024, // See Cleaning Preferences table.
      lang: 2,
      timezone: 'America/Buenos_Aires',
-     name: 'myRobotName' },
-  id: 2 }
+     name: 'myRobotName',
+     cleaningPreferences: {
+        carpetBoost: 'auto',
+        edgeClean: true,
+        cleaningPasses: 1,
+        alwaysFinish: true 
+      }
+    },
+ id: 2 }
 ```
 
 #### `setPreferences(newPreferences)`
@@ -353,6 +363,20 @@ With this you can draw a map :)
 {"ok":null,"id":293}
 ```
 
+#### `decodeCleaningPreferences(flags)`
+(this is not a promise)
+
+Example for `1024` value flags, return:
+
+```javascript
+{ 
+  carpetBoost: 'auto',
+  edgeClean: true,
+  cleaningPasses: 1,
+  alwaysFinish: true 
+}
+```
+
 ## Simplifications to set Cleaning Preferences:
 This methods use setPreferences() with the correct `flags` for each setting.
 
@@ -402,6 +426,7 @@ This methods use setPreferences() with the correct `flags` for each setting.
 ```
 
 ## Cleaning Preferences Flags table
+See `decodeCleaningPreferences(flags)` mehod.
 
 | Carpet Boost | Cleaning Passes | Finish Cleaning when bin is full | Edge Clean | Flags DEC | 
 |--------------|-----------------|----------------------------------|------------|-----------| 
