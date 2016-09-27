@@ -60,7 +60,7 @@ Get robot status via Cloud request:
 ```javascript
 var dorita980 = require('dorita980');
 
-var myRobot = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
+var myRobotViaCloud = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
 
 myRobotViaCloud.getStatus().then(function(data){
   console.log(data);  
@@ -74,7 +74,7 @@ Dock the robot via Cloud request:
 ```javascript
 var dorita980 = require('dorita980');
 
-var myRobot = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
+var myRobotViaCloud = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
 
 // go home!
 myRobotViaCloud.dock().then((response) => {
@@ -90,7 +90,7 @@ Dock the robot via Local request:
 ```javascript
 var dorita980 = require('dorita980');
 
-var myRobot = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
+var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
 
 // go home!
 myRobotViaLocal.dock().then((response) => {
