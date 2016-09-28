@@ -1,0 +1,16 @@
+{
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "extends": "semistandard",
+  "plugins": [
+    "standard"
+  ],
+  "rules": {
+    "complexity": ["warn", 10],
+    "max-depth": ["warn", 4],
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used" }]
+  }
+}
