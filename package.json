@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Unofficial iRobot Roomba 980 library sdk",
   "main": "./index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "scripts": {
     "pretest": "npm install",
     "check:style": "eslint .",
-    "test": "_mocha -- $npm_package_config_mocha && npm run check:style",
+    "test": "_mocha -- $npm_package_config_mocha && npm run check:style && npm run test:coverage",
     "test:coverage:run": "istanbul cover _mocha -- $npm_package_config_mocha",
     "test:coverage:check": "istanbul check-coverage --functions 80",
     "test:coverage": "npm run test:coverage:run && npm run test:coverage:check",

@@ -13,6 +13,10 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 - Local API control (from your LAN)
 - Simplified Cleaning Preferences settings.
 
+[![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
+
+Video: Cleaning map using dorita980 lib
+
 # Install
 
 ```bash
