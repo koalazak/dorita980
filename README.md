@@ -1,4 +1,5 @@
 # dorita980
+[![Build Status](https://travis-ci.org/koalazak/dorita980.svg?branch=master)](https://travis-ci.org/koalazak/dorita980)
 [![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
 
 Unofficial iRobot Roomba 980 library (SDK).
@@ -46,7 +47,7 @@ You can control the robot from your local network.
 ```javascript
 var dorita980 = require('dorita980');
 
-var myRobotViaCloud = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address
+var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address
 
 // start to clean!
 myRobotViaLocal.start().then((response) => {
