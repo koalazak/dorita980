@@ -13,6 +13,7 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 - Cloud API control (from inside or outside your home)
 - Local API control (from your LAN)
 - Simplified Cleaning Preferences settings.
+- Firmware 1.6.6 compatible.
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
@@ -215,17 +216,18 @@ An error response return an object with `err` property and error number:
 ```
 
 #### `getSys()`
+
 ```javascript
 { ok:
    { umi: 2,
      pid: 2,
      blid: 1,2,3,4,5,6,6,8],
-     sw: 'v1.2.9',
+     sw: 'v1.6.6',
      cfg: 0,
      boot: 3580,
      main: 4313,
      wifi: 517,
-     nav: '01.08.04',
+     nav: '01.09.08',
      ui: 2996,
      audio: 31,
      bat: 'lith' },
@@ -272,9 +274,9 @@ If `autoDecodeFlags` is `false` the returned object not include `cleaningPrefere
      timezone: 'America/Buenos_Aires',
      name: 'myRobotName',
      cleaningPreferences: {
-        carpetBoost: 'auto',
+        carpetBoost: 'auto', // 'auto', 'performance', 'eco'
         edgeClean: true,
-        cleaningPasses: 1,
+        cleaningPasses: '1', // '1', '2', 'auto'
         alwaysFinish: true 
       }
     },
@@ -377,7 +379,7 @@ Example for `1024` value flags, return:
 { 
   carpetBoost: 'auto',
   edgeClean: true,
-  cleaningPasses: 1,
+  cleaningPasses: '1',
   alwaysFinish: true 
 }
 ```
@@ -410,6 +412,11 @@ This methods use setPreferences() with the correct `flags` for each setting.
 {"ok":null,"id":293}
 ```
 
+#### `setCleaningPassesAuto()`
+```javascript
+{"ok":null,"id":293}
+```
+
 #### `setCleaningPassesOne()`
 ```javascript
 {"ok":null,"id":293}
@@ -430,35 +437,47 @@ This methods use setPreferences() with the correct `flags` for each setting.
 {"ok":null,"id":293}
 ```
 
-## Cleaning Preferences Flags table
+## Cleaning Preferences Flags table (firmware 1.6.6)
 See `decodeCleaningPreferences(flags)` mehod.
 
-| Carpet Boost | Cleaning Passes | Finish Cleaning when bin is full | Edge Clean | Flags DEC | 
-|--------------|-----------------|----------------------------------|------------|-----------| 
-| auto         | one             | on                               | on         | 1024      | 
-| auto         | one             | on                               | off        | 1026      | 
-| auto         | one             | off                              | on         | 1056      | 
-| auto         | one             | off                              | off        | 1058      | 
-| auto         | two             | on                               | on         | 1025      | 
-| auto         | two             | on                               | off        | 1027      | 
-| auto         | two             | off                              | on         | 1057      | 
-| auto         | two             | off                              | off        | 1059      | 
-| Performance  | one             | on                               | on         | 1104      | 
-| Performance  | one             | on                               | off        | 1106      | 
-| Performance  | one             | off                              | on         | 1136      | 
-| Performance  | one             | off                              | off        | 1138      | 
-| Performance  | two             | on                               | on         | 1105      | 
-| Performance  | two             | on                               | off        | 1107      | 
-| Performance  | two             | off                              | on         | 1137      | 
-| Performance  | two             | off                              | off        | 1139      | 
-| Eco          | one             | on                               | on         | 1040      | 
-| Eco          | one             | on                               | off        | 1042      | 
-| Eco          | one             | off                              | on         | 1072      | 
-| Eco          | one             | off                              | off        | 1074      | 
-| Eco          | two             | on                               | on         | 1041      | 
-| Eco          | two             | on                               | off        | 1043      | 
-| Eco          | two             | off                              | on         | 1073      | 
-| Eco          | two             | off                              | off        | 1075      | 
+| Carpet Boost | Cleaning Passes | Finish Cleaning when bin is full | Edge Clean | Flags DEC  | 
+|--------------|-----------------|----------------------------------|------------|------------| 
+| auto         | auto             | on                               | on         | 0         | 
+| auto         | auto             | on                               | off        | 2         | 
+| auto         | auto             | off                              | on         | 32        | 
+| auto         | auto             | off                              | off        | 24        | 
+| auto         | one              | on                               | on         | 1024      | 
+| auto         | one              | on                               | off        | 1026      | 
+| auto         | one              | off                              | on         | 1056      | 
+| auto         | one              | off                              | off        | 1058      | 
+| auto         | two              | on                               | on         | 1025      | 
+| auto         | two              | on                               | off        | 1027      | 
+| auto         | two              | off                              | on         | 1057      | 
+| auto         | two              | off                              | off        | 1059      | 
+| Performance  | auto             | on                               | on         | 80        | 
+| Performance  | auto             | on                               | off        | 82        | 
+| Performance  | auto             | off                              | on         | 112       | 
+| Performance  | auto             | off                              | off        | 114       | 
+| Performance  | one              | on                               | on         | 1104      | 
+| Performance  | one              | on                               | off        | 1106      | 
+| Performance  | one              | off                              | on         | 1136      | 
+| Performance  | one              | off                              | off        | 1138      | 
+| Performance  | two              | on                               | on         | 1105      | 
+| Performance  | two              | on                               | off        | 1107      | 
+| Performance  | two              | off                              | on         | 1137      | 
+| Performance  | two              | off                              | off        | 1139      | 
+| Eco          | auto             | on                               | on         | 16        | 
+| Eco          | auto             | on                               | off        | 18        | 
+| Eco          | auto             | off                              | on         | 48        | 
+| Eco          | auto             | off                              | off        | 50        | 
+| Eco          | one              | on                               | on         | 1040      | 
+| Eco          | one              | on                               | off        | 1042      | 
+| Eco          | one              | off                              | on         | 1072      | 
+| Eco          | one              | off                              | off        | 1074      | 
+| Eco          | two              | on                               | on         | 1041      | 
+| Eco          | two              | on                               | off        | 1043      | 
+| Eco          | two              | off                              | on         | 1073      | 
+| Eco          | two              | off                              | off        | 1075      | 
 
 
 

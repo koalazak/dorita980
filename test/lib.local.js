@@ -87,7 +87,7 @@ describe('dorita980 Cleaning Preferences helpers', () => {
     let preferences = viaLocal.decodeCleaningPreferences(1024);
     expect(preferences.carpetBoost).be.equal('auto');
     expect(preferences.edgeClean).be.equal(true);
-    expect(preferences.cleaningPasses).be.equal(1);
+    expect(preferences.cleaningPasses).be.equal('1');
     expect(preferences.alwaysFinish).be.equal(true);
   });
 
@@ -96,7 +96,7 @@ describe('dorita980 Cleaning Preferences helpers', () => {
     let preferences = viaLocal.decodeCleaningPreferences(1058);
     expect(preferences.carpetBoost).be.equal('auto');
     expect(preferences.edgeClean).be.equal(false);
-    expect(preferences.cleaningPasses).be.equal(1);
+    expect(preferences.cleaningPasses).be.equal('1');
     expect(preferences.alwaysFinish).be.equal(false);
   });
 
@@ -105,7 +105,7 @@ describe('dorita980 Cleaning Preferences helpers', () => {
     let preferences = viaLocal.decodeCleaningPreferences(1105);
     expect(preferences.carpetBoost).be.equal('performance');
     expect(preferences.edgeClean).be.equal(true);
-    expect(preferences.cleaningPasses).be.equal(2);
+    expect(preferences.cleaningPasses).be.equal('2');
     expect(preferences.alwaysFinish).be.equal(true);
   });
 
@@ -114,7 +114,25 @@ describe('dorita980 Cleaning Preferences helpers', () => {
     let preferences = viaLocal.decodeCleaningPreferences(1072);
     expect(preferences.carpetBoost).be.equal('eco');
     expect(preferences.edgeClean).be.equal(true);
-    expect(preferences.cleaningPasses).be.equal(1);
+    expect(preferences.cleaningPasses).be.equal('1');
+    expect(preferences.alwaysFinish).be.equal(false);
+  });
+
+  it('should return decoded Cleaning Preferences for 18 flag', () => {
+    let viaLocal = new Dorita980Local('myuser', 'mypassword', '192.168.1.104');
+    let preferences = viaLocal.decodeCleaningPreferences(18);
+    expect(preferences.carpetBoost).be.equal('eco');
+    expect(preferences.edgeClean).be.equal(false);
+    expect(preferences.cleaningPasses).be.equal('auto');
+    expect(preferences.alwaysFinish).be.equal(true);
+  });
+
+  it('should return decoded Cleaning Preferences for 112 flag', () => {
+    let viaLocal = new Dorita980Local('myuser', 'mypassword', '192.168.1.104');
+    let preferences = viaLocal.decodeCleaningPreferences(112);
+    expect(preferences.carpetBoost).be.equal('performance');
+    expect(preferences.edgeClean).be.equal(true);
+    expect(preferences.cleaningPasses).be.equal('auto');
     expect(preferences.alwaysFinish).be.equal(false);
   });
 });
@@ -134,7 +152,7 @@ describe('dorita980 local call', () => {
         'cleaningPreferences': {
           'alwaysFinish': true,
           'carpetBoost': 'auto',
-          'cleaningPasses': 1,
+          'cleaningPasses': '1',
           'edgeClean': true
         },
         'flags': 1024,
@@ -282,6 +300,24 @@ describe('dorita980 local call', () => {
     };
 
     return expect(viaLocal.setEdgeCleanOff()).eventually.deep.equal(responseOK);
+  });
+
+  it('should send setCleaningPassesAuto command', () => {
+    let viaLocal = new Dorita980Local('myuser', '123456_getprefs', '192.168.1.104');
+
+    let newPreferencesWillbe = {
+      flags: 0,
+      lang: 2,
+      timezone: 'America/Buenos_Aires',
+      name: 'myRobotName'
+    };
+
+    let responseOK = {
+      ok: null,
+      'body': generateBody('set', 'prefs', newPreferencesWillbe, 2)
+    };
+
+    return expect(viaLocal.setCleaningPassesAuto()).eventually.deep.equal(responseOK);
   });
 
   it('should send setCleaningPassesOne command', () => {
