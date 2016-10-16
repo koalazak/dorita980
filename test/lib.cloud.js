@@ -1,4 +1,4 @@
-/* global it describe*/
+/* global it describe */
 'use strict';
 
 const proxyquire = require('proxyquire');
@@ -54,7 +54,7 @@ describe('dorita980 cloud call', () => {
   it('should be rejected if get an invalid json response', () => {
     let viaCloud = new Dorita980Cloud('myuser_badjson', 'mypass');
 
-    return expect(viaCloud.getStatus()).be.rejectedWith('SyntaxError: Unexpected token b');
+    return expect(viaCloud.getStatus()).be.rejectedWith('Unexpected token b');
   });
 
   it('should send getStatus command', () => {

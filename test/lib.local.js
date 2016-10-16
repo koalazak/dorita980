@@ -1,4 +1,4 @@
-/* global it describe*/
+/* global it describe */
 'use strict';
 
 const proxyquire = require('proxyquire');
@@ -141,7 +141,7 @@ describe('dorita980 local call', () => {
   it('should be rejected if get an invalid json response', () => {
     let viaLocal = new Dorita980Local('myuser', '123456_bad', '192.168.1.104');
 
-    return expect(viaLocal.getTime()).be.rejectedWith('SyntaxError: Unexpected token b');
+    return expect(viaLocal.getTime()).be.rejectedWith('Unexpected token b');
   });
 
   it('should send getPreferences command with default decoded arg', () => {
@@ -159,7 +159,8 @@ describe('dorita980 local call', () => {
         'lang': 2,
         'name': 'myRobotName',
         'timezone': 'America/Buenos_Aires'
-      }, id: 2,
+      },
+      id: 2,
       'body': generateBody('get', 'prefs')
     };
 
