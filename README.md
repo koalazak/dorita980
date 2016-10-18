@@ -5,7 +5,7 @@
 
 Unofficial iRobot Roomba 980 library (SDK).
 
-With this library you can send commands to your Roomba 980 through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation project.
+With this library you can send commands to your Roomba 980 through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
 
 # Features
 
@@ -18,16 +18,46 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
-Video: Cleaning map using dorita980 lib
+Video: Realtime cleaning map using dorita980 lib
 
 # Install
 
+First you need node.js installed and then:
+
 ```bash
-$ npm install dorita980
+$ npm install dorita980 --save
+```
+
+# Quick start via Local request on your LAN
+You can control the robot from your local network.
+
+Create `myapp.js` file with this content:
+
+```javascript
+var dorita980 = require('dorita980');
+
+var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address
+
+// start to clean!
+myRobotViaLocal.start().then((response) => {
+  console.log(response);
+}).catch((err) => {
+  console.log(err);
+});
+
+```
+
+Then install `dorita980` using `npm` and run your program:
+
+```bash
+$ npm install dorita980 --save
+$ node myapp.js
 ```
 
 # Quick start via Cloud request
-You can control the robot from inside or outside your home
+You can control the robot from inside or outside your home.
+
+Create `myapp.js` file with this content:
 
 ```javascript
 var dorita980 = require('dorita980');
@@ -43,21 +73,11 @@ myRobotViaCloud.start().then((response) => {
 
 ```
 
-# Quick start via Local request on your LAN
-You can control the robot from your local network.
+Then install `dorita980` using `npm` and run your program:
 
-```javascript
-var dorita980 = require('dorita980');
-
-var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address
-
-// start to clean!
-myRobotViaLocal.start().then((response) => {
-  console.log(response);
-}).catch((err) => {
-  console.log(err);
-});
-
+```bash
+$ npm install dorita980 --save
+$ node myapp.js
 ```
 
 ## Examples
@@ -76,15 +96,15 @@ myRobotViaCloud.getStatus().then(function(data){
 });
 ```
 
-Dock the robot via Cloud request:
+Pause the robot via Cloud request:
 
 ```javascript
 var dorita980 = require('dorita980');
 
 var myRobotViaCloud = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
 
-// go home!
-myRobotViaCloud.dock().then((response) => {
+// Pause!
+myRobotViaCloud.pause().then((response) => {
   console.log(response);
 }).catch((err) => {
   console.log(err);
@@ -92,54 +112,20 @@ myRobotViaCloud.dock().then((response) => {
 
 ```
 
-Dock the robot via Local request:
+Pause the robot via Local request:
 
 ```javascript
 var dorita980 = require('dorita980');
 
 var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
 
-// go home!
-myRobotViaLocal.dock().then((response) => {
+// Pause!
+myRobotViaLocal.pause().then((response) => {
   console.log(response);
 }).catch((err) => {
   console.log(err);
 });
 ```
-
-## Auto discover IP address for local request:
-
-If you dont known the robot IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
-This process takes 1 or 2 seconds, so if you known the IP just use it explicity.
-
-```javascript
-var dorita980 = require('dorita980');
-
-dorita980.getRobotIP(function (ierr, ip) {
-  if (!ierr) {
-    var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', ip);
-
-    myRobotViaLocal.getMission().then((response) => {
-      console.log(response);
-    }).catch((err) => {
-      console.log(err);
-    });
-  } else {
-    console.log('error looking for robot IP');
-  }
-});
-```
-
-# How it works
-
-## Cloud
-
-When you connect your robot to your wifi network, the robot starting to receive remote commands from the iRobot Cloud Service and from the mobile app.
-iRobot Cloud Service has a public HTTP API to send commands to your robot if you known your user and password.
-
-## Local
-
-The library send commands direclty over wifi to your robot. You dont need internet connection.
 
 # How to get your username/blid and password
 (Needed for Cloud and Local requests)
@@ -170,7 +156,32 @@ Use this credentials in dorita980 lib :)
 
 ```
 
+## Auto discover IP address for local request:
+
+If you dont known the robot IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
+This process takes 1 or 2 seconds, so if you known the IP just use it explicity.
+
+```javascript
+var dorita980 = require('dorita980');
+
+dorita980.getRobotIP(function (ierr, ip) {
+  if (!ierr) {
+    var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', ip);
+
+    myRobotViaLocal.getMission().then((response) => {
+      console.log(response);
+    }).catch((err) => {
+      console.log(err);
+    });
+  } else {
+    console.log('error looking for robot IP');
+  }
+});
+```
+
 # Local API
+
+The library send commands direclty over wifi to your robot. You dont need internet connection.
 
 ## Succesfull response
 
@@ -367,6 +378,7 @@ With this you can draw a map :)
 ```
 
 #### `dock()`
+Note: before dock you need to pause() or stop() your robot.
 ```javascript
 {"ok":null,"id":293}
 ```
@@ -483,6 +495,9 @@ See `decodeCleaningPreferences(flags)` mehod.
 
 
 # Cloud API
+
+When you connect your robot to your wifi network, the robot starting to receive remote commands from the iRobot Cloud Service and from the mobile app.
+iRobot Cloud Service has a public HTTP API to send commands to your robot if you known your user and password.
 
 - `myRobotViaCloud.getStatus()`
 - `myRobotViaCloud.accumulatedHistorical()`
