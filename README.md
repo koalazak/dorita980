@@ -15,6 +15,8 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 - Local API control (from your LAN)
 - Simplified Cleaning Preferences settings.
 - Firmware 1.6.6 compatible.
+- See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 throw.
+
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
