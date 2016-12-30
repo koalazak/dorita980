@@ -3,9 +3,12 @@
 [![dependencies Status](https://david-dm.org/koalazak/dorita980/status.svg)](https://david-dm.org/koalazak/dorita980)
 [![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
 
-Unofficial iRobot Roomba 980 library (SDK).
+Unofficial iRobot Roomba 980 node.js library (SDK).
 
 With this library you can send commands to your Roomba 980 through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
+
+See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
+
 
 # Features
 
@@ -20,7 +23,7 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
-Video: Realtime cleaning map using dorita980 lib
+Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com/koalazak/rest980).
 
 # Install
 
@@ -536,6 +539,15 @@ iRobot Cloud Service has a public HTTP API to send commands to your robot if you
 - `myRobotViaCloud.sleep()`
 - `myRobotViaCloud.off()`
 - `myRobotViaCloud.fbeep()`
+
+## Note for node.js v0.10 users
+
+dorita980 is compatible with node.js > 4.0 But you can use the [getpassword](https://github.com/koalazak/dorita980#how-to-get-your-usernameblid-and-password) feature in node.js < 4.0 using `--harmony` flag like that:
+
+```bash
+$ node --harmony ./bin/getpassword.js "192.168.1.104"
+```
+
 
 ## Author
 
