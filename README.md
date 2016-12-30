@@ -317,8 +317,10 @@ Response:
 ```
 
 
-#### `getMission()`
+#### `getMission(autoDecodeFlags)`
 With this you can draw a map :)
+
+If `autoDecodeFlags` is `false` the returned object not include `missionFlags` and `notReadyMsg` properties. Default is `true` so always decode flags.
 
 ```javascript
 { ok:
@@ -332,7 +334,10 @@ With this you can draw a map :)
      error: 0,
      notReady: 0,
      mssnM: 0,
-     sqft: 0 },
+     sqft: 0,
+     missionFlags: { idle: true, binFull: false, binRemoved: false, beeping: false },
+     notReadyMsg: 'Ready'
+     },
   id: 2 }
 ```
 

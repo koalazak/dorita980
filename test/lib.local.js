@@ -22,6 +22,8 @@ var mockRequest = function (options) {
       return Promise.resolve('bad json');
     case new Buffer('user:123456_getprefs_err').toString('base64'):
       return Promise.resolve(JSON.stringify({'error': -12345, 'body': options.body}));
+    case new Buffer('user:123456_getmission_err').toString('base64'):
+      return Promise.resolve(JSON.stringify({'error': -12345, 'body': options.body}));
     case new Buffer('user:123456_getprefs').toString('base64'):
       if (JSON.parse(options.body).do === 'get') {
         let resp = {
@@ -38,6 +40,15 @@ var mockRequest = function (options) {
       } else {
         return Promise.resolve(JSON.stringify({'ok': null, 'body': options.body}));
       }
+    case new Buffer('user:123456_getmission').toString('base64'):
+      let resp = {
+        ok: {
+          flags: 4
+        },
+        id: 2,
+        body: options.body
+      };
+      return Promise.resolve(JSON.stringify(resp));
     default:
       expect(options.headers['Authorization']).to.be.equal('Basic ' + new Buffer('user:mypassword').toString('base64'));
       return Promise.resolve(JSON.stringify({'ok': null, 'body': options.body}));
@@ -415,11 +426,46 @@ describe('dorita980 local call', () => {
     return expect(viaLocal.getSKU()).eventually.deep.equal(responseOK);
   });
 
-  it('should send getMission command', () => {
-    let viaLocal = new Dorita980Local('myuser', 'mypassword', '192.168.1.104');
+  it('should send getMission command with default decoded arg', () => {
+    let viaLocal = new Dorita980Local('myuser', '123456_getmission', '192.168.1.104');
 
     let responseOK = {
-      ok: null,
+      ok: {
+        'flags': 4,
+        'missionFlags': {
+          'beeping': false,
+          'binFull': false,
+          'binRemoved': false,
+          'idle': false
+        },
+        'notReadyMsg': 'Unknown'
+      },
+      id: 2,
+      'body': generateBody('get', 'mssn')
+    };
+
+    return expect(viaLocal.getMission()).eventually.deep.equal(responseOK);
+  });
+
+  it('should send getMission command with decoded arg in false', () => {
+    let viaLocal = new Dorita980Local('myuser', '123456_getmission', '192.168.1.104');
+
+    let responseOK = {
+      ok: {
+        'flags': 4
+      },
+      id: 2,
+      'body': generateBody('get', 'mssn')
+    };
+
+    return expect(viaLocal.getMission(false)).eventually.deep.equal(responseOK);
+  });
+
+  it('should send getMission command with default decoded arg and handle not ok response', () => {
+    let viaLocal = new Dorita980Local('myuser', '123456_getmission_err', '192.168.1.104');
+
+    let responseOK = {
+      'error': -12345,
       'body': generateBody('get', 'mssn')
     };
 
