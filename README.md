@@ -9,15 +9,21 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
 
+# Firmware 2.0.0 documentation
+
+All this document is only for firmware 2.0.0. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
+
+If you have firmware version 1.6.6 [click here](https://github.com/koalazak/dorita980/blob/master/READMEv1.6.6.md) to see the old documentation.
+
+There are some breaking changes between 1.6.6 and 2.0.0 in this API (dorita980 v2 and v3).
 
 # Features
 
 - Get your username/password easily
 - Auto discovery robot IP (optional)
-- Cloud API control (from inside or outside your home)
 - Local API control (from your LAN)
 - Simplified Cleaning Preferences settings.
-- Firmware 1.6.6 compatible.
+- Firmware 2.0.0 compatible.
 - See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 throw.
 
 
@@ -43,11 +49,12 @@ var dorita980 = require('dorita980');
 
 var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address
 
-// start to clean!
-myRobotViaLocal.start().then((response) => {
-  console.log(response);
-}).catch((err) => {
-  console.log(err);
+myRobotViaLocal.on('connect', function () {
+  myRobotViaLocal.start().then(() => {
+    myRobotViaLocal.end(); // disconnect to leave free the channel for the mobile app.
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 
 ```
@@ -59,63 +66,7 @@ $ npm install dorita980 --save
 $ node myapp.js
 ```
 
-# Quick start via Cloud request
-You can control the robot from inside or outside your home.
-
-Create `myapp.js` file with this content:
-
-```javascript
-var dorita980 = require('dorita980');
-
-var myRobotViaCloud = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
-
-// start to clean!
-myRobotViaCloud.start().then((response) => {
-  console.log(response);
-}).catch((err) => {
-  console.log(err);
-});
-
-```
-
-Then install `dorita980` using `npm` and run your program:
-
-```bash
-$ npm install dorita980 --save
-$ node myapp.js
-```
-
-## Examples
-
-Get robot status via Cloud request:
-
-```javascript
-var dorita980 = require('dorita980');
-
-var myRobotViaCloud = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
-
-myRobotViaCloud.getStatus().then(function(data){
-  console.log(data);  
-}).catch(function(err){
-  console.error(err);
-});
-```
-
-Pause the robot via Cloud request:
-
-```javascript
-var dorita980 = require('dorita980');
-
-var myRobotViaCloud = new dorita980.Cloud('MyUsernameBlid', 'MyPassword'); // No need robot IP
-
-// Pause!
-myRobotViaCloud.pause().then((response) => {
-  console.log(response);
-}).catch((err) => {
-  console.log(err);
-});
-
-```
+# Examples
 
 Pause the robot via Local request:
 
@@ -124,47 +75,43 @@ var dorita980 = require('dorita980');
 
 var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
 
-// Pause!
-myRobotViaLocal.pause().then((response) => {
-  console.log(response);
-}).catch((err) => {
-  console.log(err);
+myRobotViaLocal.on('connect', function () {
+  // Pause!
+  myRobotViaLocal.pause().then(() => {
+    myRobotViaLocal.end(); // disconnect to leave free the channel for the mobile app.
+  }).catch((err) => {
+    console.log(err);
+  });
+});
+```
+
+Get robot week schedule
+
+```javascript
+var dorita980 = require('dorita980');
+
+var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
+
+myRobotViaLocal.on('connect', function () {
+  myRobotViaLocal.getWeek().then((weekConfig) => {
+    console.log(weekConfig)
+    myRobotViaLocal.end(); // disconnect to leave free the channel for the mobile app.
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 ```
 
 # How to get your username/blid and password
 (Needed for Cloud and Local requests)
 
-Download or clone this repo then install, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use `dorita980.getRobotIP()` method.
+Not implemented yet in Firmware 2.0.0. Sniff your network data to get your password.
 
-```bash
-$ git clone https://github.com/koalazak/dorita980.git
-$ cd dorita980
-$ npm install
-$ npm run getpassword
-```
 
-Example Output:
-
-```
-$ cd dorita980
-$ npm install
-$ npm run getpassword 192.168.1.103
-> node ./bin/getpassword.js "192.168.1.103"
-
-Make sure your robot is on the Home Base and powered on. Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light. Then wait...
-========>
-Good job!
-Password: xxxxxxxxxxxxx
-Username/blid: yyyyyyyyyyyy
-Use this credentials in dorita980 lib :)
-
-```
-
-## Auto discover IP address for local request:
+# Auto discover IP address for local request:
 
 If you dont known the robot IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
-This process takes 1 or 2 seconds, so if you known the IP just use it explicity.
+This process takes 1 or 2 seconds, so if you know the IP just use it explicity.
 
 ```javascript
 var dorita980 = require('dorita980');
@@ -188,82 +135,256 @@ dorita980.getRobotIP(function (ierr, ip) {
 
 The library send commands direclty over wifi to your robot. You dont need internet connection.
 
-## Succesfull response
-
-A successfull response return an object with `ok` property and the internal request id:
-
-```javascript
-{ ok: null, id: 2 }
-```
-
-## Error response
-An error response return an object with `err` property and error number:
-
-```javascript
-{ err: -32600 }
-```
-
 ## Methods
+
+#### `end()`
+
+Close the connection to the robot. Its important if you want to send commands via your mobile app. There's maximum 1 connection at any time, so if your app is connected, the mobile app only works via cloud access.
+
+#### `getRobotState(Array waitForFields)`
+
+Get robot state but wait for `waitForFields` fields before return.
+
+The robot push data to this state all the time. The state object start empty and the robot will increasing the data here over the time.
+
+```javascript
+myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
+  console.log(actualState);
+});
+```
+
+Full state should contains:
+```javascript
+
+{ netinfo:
+   { dhcp: true,
+     addr: 4294967040,
+     mask: 4294967040,
+     gw: 4294967040,
+     dns1: 4294967040,
+     dns2: 0,
+     bssid: '12:12:12:12:12:12',
+     sec: 4 },
+  wifistat: { wifi: 1, uap: false, cloud: 4 },
+  wlcfg: { sec: 7, ssid: '123123123123123123123123' },
+  mac: '34:34:34:34:34:34',
+  country: 'US',
+  cloudEnv: 'prod',
+  svcEndpoints: { svcDeplId: 'v005' },
+  localtimeoffset: -180,
+  utctime: 1487103319,
+  pose: { theta: 61, point: { x: 171, y: -113 } },
+  batPct: 100,
+  dock: { known: true },
+  bin: { present: true, full: false },
+  audio: { active: false },
+  cleanMissionStatus:
+   { cycle: 'none',
+     phase: 'charge',
+     expireM: 0,
+     rechrgM: 0,
+     error: 0,
+     notReady: 0,
+     mssnM: 2,
+     sqft: 29,
+     initiator: 'manual',
+     nMssn: 324 },
+  language: 2,
+  noAutoPasses: false,
+  noPP: false,
+  ecoCharge: false,
+  vacHigh: false,
+  binPause: false,
+  carpetBoost: true,
+  openOnly: false,
+  twoPass: false,
+  schedHold: false,
+  lastCommand: { command: 'dock', time: 1487103424, initiator: 'manual' },
+  langs:
+   [ { 'en-US': 0 },
+     { 'fr-FR': 1 },
+     { 'es-ES': 2 },
+     { 'de-DE': 3 },
+     { 'it-IT': 4 } ],
+  bbnav: { aMtrack: 45, nGoodLmrks: 15, aGain: 12, aExpo: 9 },
+  bbpanic: { panics: [ 8, 8, 8, 14, 8 ] },
+  bbpause: { pauses: [ 15, 0, 0, 0, 0, 0, 0, 0, 0, 17 ] },
+  bbmssn:
+   { nMssn: 323,
+     nMssnOk: 218,
+     nMssnC: 99,
+     nMssnF: 1,
+     aMssnM: 35,
+     aCycleM: 31 },
+  bbrstinfo: { nNavRst: 41, nMobRst: 0, causes: '0000' },
+  cap: { pose: 1, ota: 2, multiPass: 2, carpetBoost: 1 },
+  sku: 'R98----',
+  batteryType: 'lith',
+  soundVer: '31',
+  uiSwVer: '4582',
+  navSwVer: '01.09.09',
+  wifiSwVer: '20902',
+  mobilityVer: '5309',
+  bootloaderVer: '3580',
+  umiVer: '5',
+  softwareVer: 'v2.0.0-34',
+  tz:
+   { events: [ { dt: 0, off: -180 }, { dt: 0, off: -180 }, { dt: 0, off: 0 } ],
+     ver: 2 },
+  timezone: 'America/Buenos_Aires',
+  name: 'robotNAme',
+  cleanSchedule:
+   { cycle: [ 'none', 'none', 'none', 'none', 'none', 'none', 'none' ],
+     h: [ 17, 10, 10, 12, 10, 13, 17 ],
+     m: [ 0, 30, 30, 0, 30, 30, 0 ] },
+  bbchg3:
+   { avgMin: 158,
+     hOnDock: 6110,
+     nAvail: 1280,
+     estCap: 12311,
+     nLithChrg: 233,
+     nNimhChrg: 0,
+     nDocks: 98 },
+  bbchg: { nChgOk: 226, nLithF: 0, aborts: [ 4, 4, 4 ] },
+  bbswitch: { nBumper: 55889, nClean: 300, nSpot: 47, nDock: 98, nDrops: 300 },
+  bbrun:
+   { hr: 211,
+     min: 48,
+     sqft: 566,
+     nStuck: 17,
+     nScrubs: 85,
+     nPicks: 592,
+     nPanics: 178,
+     nCliffsF: 1532,
+     nCliffsR: 2224,
+     nMBStll: 0,
+     nWStll: 1,
+     nCBump: 0 },
+  bbsys: { hr: 6522, min: 54 },
+  signal: { rssi: -43, snr: 40 } }
+
+```
+
+#### `getPreferences()`
+
+Get full robot state but wait for ['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose'] fields before return.
+
+Alias for `getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose', 'signal'])`
+
+Waiting for 'signal' we are sure we have the full state object.
+
+#### `setPreferences(newPreferences)`
+
+Partial overwrite the robot state to configure it.
+
+```javascript
+var newPreferences = { 
+ binPause: false
+};
+
+myRobotViaLocal.setPreferences(newPreferences)
+```
+
+Response:
+
+```javascript
+{"ok":null}
+```
+
+
+#### `getMission()`
+With this you can draw a map :)
+
+```javascript
+{ cleanMissionStatus:
+   { cycle: 'none',
+     phase: 'charge',
+     expireM: 0,
+     rechrgM: 0,
+     error: 0,
+     notReady: 0,
+     mssnM: 15,
+     sqft: 0,
+     initiator: 'localApp',
+     nMssn: 323 },
+  pose: { theta: -160, point: { x: 166, y: -11 } } }
+```
+
+#### `getWirelessStatus()`
+```javascript
+{ wifistat: { wifi: 1, uap: false, cloud: 4 },
+  netinfo:
+   { dhcp: true,
+     addr: 3232235880,
+     mask: 4294967040,
+     gw: 3232235777,
+     dns1: 3232235777,
+     dns2: 0,
+     bssid: 'c0:56:27:70:3b:fe',
+     sec: 4 } }
+```
 
 #### `getTime()`
 ```javascript
-{"ok":{"d":"sat","h":13,"m":8},"id":8}
-```
-
-#### `setTime({"d":6,"h":13,"m":9})`
-
-```javascript
-{"ok":null,"id":23}
-```
-
-#### `setPtime({"time":1474128577})`
-
-```javascript
-{"ok":null,"id":23}
+1487100141
 ```
 
 #### `getBbrun()`
 ```javascript
-{"ok":{"hr":103,"min":10,"sqft":251,"nStuck":8,"nScrubs":62,"nPicks":280,"nPanics":97,"nCliffsF":518,"nCliffsR":1005,"nMBStll":0,"nWStll":1,"nCBump":0},"id":9}
+ { hr: 211,
+   min: 48,
+   sqft: 566,
+   nStuck: 17,
+   nScrubs: 85,
+   nPicks: 592,
+   nPanics: 178,
+   nCliffsF: 1532,
+   nCliffsR: 2224,
+   nMBStll: 0,
+   nWStll: 1,
+   nCBump: 0 }
 ```
 
 #### `getLangs()`
 ```javascript
-{ ok: { total: 5, iterIndex: 2, iterName: 'en-US' }, id: 2 }
+ [ { 'en-US': 0 },
+   { 'fr-FR': 1 },
+   { 'es-ES': 2 },
+   { 'de-DE': 3 },
+   { 'it-IT': 4 } ]
 ```
 
 #### `getSys()`
 
 ```javascript
-{ ok:
-   { umi: 2,
-     pid: 2,
-     blid: 1,2,3,4,5,6,6,8],
-     sw: 'v1.6.6',
-     cfg: 0,
-     boot: 3580,
-     main: 4313,
-     wifi: 517,
-     nav: '01.09.08',
-     ui: 2996,
-     audio: 31,
-     bat: 'lith' },
-  id: 2 }
+{ bbrstinfo: { nNavRst: 41, nMobRst: 0, causes: '0000' },
+  cap: { pose: 1, ota: 2, multiPass: 2, carpetBoost: 1 },
+  sku: 'R98----',
+  batteryType: 'lith',
+  soundVer: '31',
+  uiSwVer: '4582',
+  navSwVer: '01.09.09',
+  wifiSwVer: '20902',
+  mobilityVer: '5309',
+  bootloaderVer: '3580',
+  umiVer: '5',
+  softwareVer: 'v2.0.0-34',
+  audio: { active: false },
+  bin: { present: true, full: false } }
 ```
 
-#### `getWirelessLastStat()`
+#### `getWirelessLastStatus()`
 ```javascript
-{ ok: { softap: 0, station: 1, cloud: 3, strssi: 47, diagflags: 0 }, id: 2 }
+{ wifi: 1, uap: false, cloud: 4 },
+  wlcfg: { sec: 7, ssid: '1234567890796857336364' }
 ```
 
 #### `getWeek()`
 Monday disable and every day start at 10:30am
 ```javascript
-{ ok:
-   { cycle: [ 'start', 'none', 'start', 'start', 'start', 'start', 'start' ],
-     h: [ 10, 10, 10, 10, 10, 10, 10 ],
-     m: [ 30, 30, 30, 30, 30, 30, 30 ] },
-  id: 2 }
+{ cycle: [ 'none', 'none', 'none', 'none', 'none', 'none', 'none' ],
+  h: [ 17, 10, 10, 12, 10, 13, 17 ],
+  m: [ 0, 30, 30, 0, 30, 30, 0 ] }
 ```
 
 #### `setWeek(newWeek)`
@@ -277,134 +398,38 @@ myRobotViaLocal.setWeek(newWeek)
 Response:
 
 ```javascript
-{"ok":null,"id":218}
-```
-
-#### `getPreferences(autoDecodeFlags)`
-
-If `autoDecodeFlags` is `false` the returned object not include `cleaningPreferences` property. Default is `true` so always decode flags.
-
-```javascript
-{ ok:
-   { flags: 1024, // See Cleaning Preferences table.
-     lang: 2,
-     timezone: 'America/Buenos_Aires',
-     name: 'myRobotName',
-     cleaningPreferences: {
-        carpetBoost: 'auto', // 'auto', 'performance', 'eco'
-        edgeClean: true,
-        cleaningPasses: '1', // '1', '2', 'auto'
-        alwaysFinish: true 
-      }
-    },
- id: 2 }
-```
-
-#### `setPreferences(newPreferences)`
-
-```javascript
-var newPreferences = { 
-  flags: 1107, // See Cleaning Preferences table.
-  lang: 2,
-  timezone: 'America/Buenos_Aires',
-  name: 'myRobotName'
-};
-
-myRobotViaLocal.setPreferences(newPreferences)
-```
-
-Response:
-
-```javascript
-{"ok":null,"id":293}
-```
-
-
-#### `getMission(autoDecodeFlags)`
-With this you can draw a map :)
-
-If `autoDecodeFlags` is `false` the returned object not include `missionFlags` and `notReadyMsg` properties. Default is `true` so always decode flags.
-
-```javascript
-{ ok:
-   { flags: 0,
-     cycle: 'none',
-     phase: 'charge',
-     pos: { theta: 179, point: {x: 102, y: -13} },
-     batPct: 99,
-     expireM: 0,
-     rechrgM: 0,
-     error: 0,
-     notReady: 0,
-     mssnM: 0,
-     sqft: 0,
-     missionFlags: { idle: true, binFull: false, binRemoved: false, beeping: false },
-     notReadyMsg: 'Ready'
-     },
-  id: 2 }
-```
-
-#### `getWirelessStatus()`
-```javascript
-{ ok:
-   { softap: 0,
-     station: 1,
-     strssi: 45,
-     dhcp: 1,
-     addr: 1744939200,
-     mask: 16777215,
-     gtwy: 16885952,
-     dns1: 16885952,
-     dns2: 0,
-     bssid: [ 123, 23, 23, 123, 23, 123 ],
-     sec: 4 },
-  id: 2 }
+{"ok":null}
 ```
 
 #### `getCloudConfig()`
 ```javascript
-{ ok: { cloudconfig: 'https://irobot-connect.axeda.com/ammp/' },
-  id: 2 }
+prod
 ```
 
 #### `start()`
 ```javascript
-{"ok":null,"id":293}
+{"ok":null}
 ```
 
 #### `pause()`
 ```javascript
-{"ok":null,"id":293}
+{"ok":null}
 ```
 
 #### `stop()`
 ```javascript
-{"ok":null,"id":293}
+{"ok":null}
 ```
 
 #### `resume()`
 ```javascript
-{"ok":null,"id":293}
+{"ok":null}
 ```
 
 #### `dock()`
 Note: before dock you need to pause() or stop() your robot.
 ```javascript
-{"ok":null,"id":293}
-```
-
-#### `decodeCleaningPreferences(flags)`
-(this is not a promise)
-
-Example for `1024` value flags, return:
-
-```javascript
-{ 
-  carpetBoost: 'auto',
-  edgeClean: true,
-  cleaningPasses: '1',
-  alwaysFinish: true 
-}
+{"ok":null}
 ```
 
 ## Simplifications to set Cleaning Preferences:
@@ -412,133 +437,125 @@ This methods use setPreferences() with the correct `flags` for each setting.
 
 #### `setCarpetBoostAuto()`
 ```javascript
-{"ok":null,"id":293}
+{"ok":null}
 ```
 
 #### `setCarpetBoostPerformance()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setCarpetBoostEco()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setEdgeCleanOn()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setEdgeCleanOff()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setCleaningPassesAuto()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setCleaningPassesOne()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setCleaningPassesTwo()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setAlwaysFinishOn()`
-```javascript
-{"ok":null,"id":293}
-```
 
 #### `setAlwaysFinishOff()`
+
+
+## Events
+
+#### `connect` event
+
+Emitted on successful Connection.
+
+`function () {}`
+
+Put your code inside this callback.
+
+#### `close` event
+
+Emitted after a disconnection.
+
+#### `offline`
+
+Emitted when the client goes offline.
+
+
+#### `update` event
+
+Emitted every time the Robot publish a new message to the mqtt bus.
+
+`function (data) {}`
+
+- `data` Data published by the Robot
+
 ```javascript
-{"ok":null,"id":293}
+myRobotViaLocal.on('update', function (data) {
+ console.log(data);
+});
+```
+Will print:
+```javascript
+{ state:
+   { reported:
+      { soundVer: '31',
+        uiSwVer: '4582',
+        navSwVer: '01.09.09',
+        wifiSwVer: '20902',
+        mobilityVer: '5309',
+        bootloaderVer: '3580',
+        umiVer: '5',
+        softwareVer: 'v2.0.0-34' } } }
 ```
 
-## Cleaning Preferences Flags table (firmware 1.6.6)
-See `decodeCleaningPreferences(flags)` mehod.
+#### `mission` event
 
-| Carpet Boost | Cleaning Passes | Finish Cleaning when bin is full | Edge Clean | Flags DEC  | 
-|--------------|-----------------|----------------------------------|------------|------------| 
-| auto         | auto             | on                               | on         | 0         | 
-| auto         | auto             | on                               | off        | 2         | 
-| auto         | auto             | off                              | on         | 32        | 
-| auto         | auto             | off                              | off        | 24        | 
-| auto         | one              | on                               | on         | 1024      | 
-| auto         | one              | on                               | off        | 1026      | 
-| auto         | one              | off                              | on         | 1056      | 
-| auto         | one              | off                              | off        | 1058      | 
-| auto         | two              | on                               | on         | 1025      | 
-| auto         | two              | on                               | off        | 1027      | 
-| auto         | two              | off                              | on         | 1057      | 
-| auto         | two              | off                              | off        | 1059      | 
-| Performance  | auto             | on                               | on         | 80        | 
-| Performance  | auto             | on                               | off        | 82        | 
-| Performance  | auto             | off                              | on         | 112       | 
-| Performance  | auto             | off                              | off        | 114       | 
-| Performance  | one              | on                               | on         | 1104      | 
-| Performance  | one              | on                               | off        | 1106      | 
-| Performance  | one              | off                              | on         | 1136      | 
-| Performance  | one              | off                              | off        | 1138      | 
-| Performance  | two              | on                               | on         | 1105      | 
-| Performance  | two              | on                               | off        | 1107      | 
-| Performance  | two              | off                              | on         | 1137      | 
-| Performance  | two              | off                              | off        | 1139      | 
-| Eco          | auto             | on                               | on         | 16        | 
-| Eco          | auto             | on                               | off        | 18        | 
-| Eco          | auto             | off                              | on         | 48        | 
-| Eco          | auto             | off                              | off        | 50        | 
-| Eco          | one              | on                               | on         | 1040      | 
-| Eco          | one              | on                               | off        | 1042      | 
-| Eco          | one              | off                              | on         | 1072      | 
-| Eco          | one              | off                              | off        | 1074      | 
-| Eco          | two              | on                               | on         | 1041      | 
-| Eco          | two              | on                               | off        | 1043      | 
-| Eco          | two              | off                              | on         | 1073      | 
-| Eco          | two              | off                              | off        | 1075      | 
+Emitted every `emitIntervalTime` milliseconds with the mission data. (util for mapping)
 
+`function (data) {}`
 
+- `data` Mission data with `cleanMissionStatus` and `pose` state properties.
+
+```javascript
+var cleanMissionStatus = 300; // default is 800ms
+var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104', 2, cleanMissionStatus); // Note Firmware version.
+
+myRobotViaLocal.on('mission', function (data) {
+  console.log(data);
+});
+```
+Will print each 300ms:
+
+```javascript
+{ cleanMissionStatus:
+   { cycle: 'none',
+     phase: 'charge',
+     expireM: 0,
+     rechrgM: 0,
+     error: 0,
+     notReady: 0,
+     mssnM: 15,
+     sqft: 0,
+     initiator: 'localApp',
+     nMssn: 323 },
+  pose: { theta: -160, point: { x: 166, y: -11 } } }
+```
+
+#### `state` event
+
+Emitted every time the Robot publish a new message to the mqtt bus. 
+
+`function (data) {}`
+
+- `data` Full robot state object
+
+```javascript
+myRobotViaLocal.on('state', function (data) {
+ console.log(data);
+});
+```
+Will print the Full robot state!
 
 # Cloud API
 
-When you connect your robot to your wifi network, the robot starting to receive remote commands from the iRobot Cloud Service and from the mobile app.
-iRobot Cloud Service has a public HTTP API to send commands to your robot if you known your user and password.
-
-- `myRobotViaCloud.getStatus()`
-- `myRobotViaCloud.accumulatedHistorical()`
-- `myRobotViaCloud.missionHistory()`
-- `myRobotViaCloud.clean()`
-- `myRobotViaCloud.quick()`
-- `myRobotViaCloud.spot()`
-- `myRobotViaCloud.dock()`
-- `myRobotViaCloud.start()`
-- `myRobotViaCloud.pause()`
-- `myRobotViaCloud.resume()`
-- `myRobotViaCloud.stop()`
-- `myRobotViaCloud.wake()`
-- `myRobotViaCloud.reset()`
-- `myRobotViaCloud.find()`
-- `myRobotViaCloud.wipe()` (untested)
-- `myRobotViaCloud.patch()` (untested)
-- `myRobotViaCloud.dlpkg()` (untested)
-- `myRobotViaCloud.rechrg()` (untested)
-- `myRobotViaCloud.wlapon()` (untested)
-- `myRobotViaCloud.wlapoff()` (untested)
-- `myRobotViaCloud.wlston()` (untested)
-- `myRobotViaCloud.wlstoff()` (untested)
-- `myRobotViaCloud.wifiscan()` (untested)
-- `myRobotViaCloud.ipdone()` (untested)
-- `myRobotViaCloud.provdone()` (untested)
-- `myRobotViaCloud.bye()` (untested)
-- `myRobotViaCloud.wllogflush()` (untested)
-- `myRobotViaCloud.sleep()`
-- `myRobotViaCloud.off()`
-- `myRobotViaCloud.fbeep()`
+Not implemented yet in Firmware 2.0.0
 
 ## Note for node.js v0.10 users
 

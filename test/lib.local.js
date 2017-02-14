@@ -55,7 +55,7 @@ var mockRequest = function (options) {
   }
 };
 
-const Dorita980Local = proxyquire('../lib/local.js', {
+const Dorita980Local = proxyquire('../lib/v1/local.js', {
   'request-promise': mockRequest
 });
 

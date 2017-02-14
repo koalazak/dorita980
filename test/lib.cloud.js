@@ -21,7 +21,7 @@ var mockRequest = function (options) {
   return Promise.resolve(JSON.stringify({uri: options.uri}));
 };
 
-const Dorita980Cloud = proxyquire('../lib/cloud.js', {
+const Dorita980Cloud = proxyquire('../lib/v1/cloud.js', {
   'request-promise': mockRequest
 });
 
