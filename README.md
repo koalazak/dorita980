@@ -139,7 +139,9 @@ The library send commands direclty over wifi to your robot. You dont need intern
 
 #### `end()`
 
-Close the connection to the robot. Its important if you want to send commands via your mobile app. There's maximum 1 connection at any time, so if your app is connected, the mobile app only works via cloud access.
+Close the connection to the robot. Its important if you want to send commands via the official mobile app via Local network. There's maximum 1 connection at any time in local ntwork, so if your app is connected, the official mobile app only works via cloud access.
+
+Meanwhile dorita980 is connect you can call other methods to send commands and listen for the events to get data. Just not call .end() method if you want. Meanwhile dorita980 is connected the official mobile app will then just go via the cloud to send commands to your robot.
 
 #### `getRobotState(Array waitForFields)`
 
