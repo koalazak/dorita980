@@ -80,6 +80,7 @@ function getBlid (rid, pass) {
 }
 
 function checkV2 () {
+  var sliceFrom = 13;
   discovery();
   const packet = 'f005efcc3b2900';
   var client = tls.connect(8883, host, {rejectUnauthorized: false}, function () {
@@ -87,10 +88,14 @@ function checkV2 () {
   });
 
   client.on('data', function (data) {
+    if (data.length === 2) {
+      sliceFrom = 9;
+      return;
+    }
     if (data.length <= 7) {
       console.log('Error getting password. Follow the instructions and try again.');
     } else {
-      console.log('Password=> ' + new Buffer(data).slice(13).toString() + ' <= Yes, all this string.');
+      console.log('Password=> ' + new Buffer(data).slice(sliceFrom).toString() + ' <= Yes, all this string.');
       console.log('Use this credentials in dorita980 lib :)');
     }
     client.end();
