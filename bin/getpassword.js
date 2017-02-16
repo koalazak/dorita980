@@ -1,15 +1,16 @@
 'use strict';
 
 const request = require('request');
+const tls = require('tls');
+const discovery = require('../lib/discovery');
 
 if (!process.argv[2]) {
-  console.log('Use: npm run getpassword <robot_ip_address>');
+  console.log('Use: npm run getpassword <robot_ip_address> [firmware version]');
   process.exit();
 }
 
 const host = process.argv[2];
-
-console.log('Make sure your robot is on the Home Base and powered on (green lights on). Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light. Then wait and look here...');
+const fversion = process.argv[3];
 
 var requestOptions = {
   'method': 'POST',
@@ -26,7 +27,7 @@ var requestOptions = {
   }
 };
 
-function check (rid) {
+function checkV1 (rid) {
   if (rid === 120) {
     console.log('Timeout getting password. Are you following the instructions? You already setup your robot? Its the robot IP correct?');
     process.exit(1);
@@ -41,7 +42,7 @@ function check (rid) {
     }
 
     if (response.statusCode === 401) {
-      setTimeout(function () { check(++rid); }, 2000);
+      setTimeout(function () { checkV1(++rid); }, 2000);
     } else if (response.statusCode === 200) {
       console.log('========>');
       let pass = JSON.parse(body).ok.passwd;
@@ -50,7 +51,7 @@ function check (rid) {
       getBlid(++rid, pass);
     } else {
       console.log('Unespected response. Checking again...');
-      setTimeout(function () { check(++rid); }, 2000);
+      setTimeout(function () { checkV1(++rid); }, 2000);
     }
   });
 }
@@ -78,4 +79,35 @@ function getBlid (rid, pass) {
   });
 }
 
-check(1);
+function checkV2 () {
+  discovery();
+  const packet = 'f005efcc3b2900';
+  var client = tls.connect(8883, host, {rejectUnauthorized: false}, function () {
+    client.write(new Buffer(packet, 'hex'));
+  });
+
+  client.on('data', function (data) {
+    if (data.length <= 7) {
+      console.log('Error getting password. Follow the instructions and try again.');
+    } else {
+      console.log('Password=> ' + new Buffer(data).slice(13).toString() + ' <= Yes, all this string.');
+      console.log('Use this credentials in dorita980 lib :)');
+    }
+    client.end();
+    process.exit(0);
+  });
+
+  client.setEncoding('utf-8');
+}
+
+console.log('Make sure your robot is on the Home Base and powered on (green lights on). Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light.');
+
+if (fversion === '1') {
+  console.log('Then wait and look here...');
+  checkV1(1);
+} else {
+  console.log('Then press any key here...');
+  process.stdin.setRawMode(true);
+  process.stdin.resume();
+  process.stdin.on('data', checkV2);
+}

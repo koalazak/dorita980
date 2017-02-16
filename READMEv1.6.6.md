@@ -148,7 +148,7 @@ Download or clone this repo then install, then run `npm run getpassword`. You ne
 $ git clone https://github.com/koalazak/dorita980.git
 $ cd dorita980
 $ npm install
-$ npm run getpassword
+$ npm run getpassword <robotIP> <firmwareversion>
 ```
 
 Example Output:

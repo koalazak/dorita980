@@ -103,10 +103,43 @@ myRobotViaLocal.on('connect', function () {
 ```
 
 # How to get your username/blid and password
+
 (Needed for Cloud and Local requests)
 
-Not implemented yet in Firmware 2.0.0. Sniff your network data to get your password.
+Download or clone this repo then install, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use `dorita980.getRobotIP()` method.
 
+```bash
+$ git clone https://github.com/koalazak/dorita980.git
+$ cd dorita980
+$ npm install
+$ npm run getpassword <robotIP>
+```
+
+Example Output:
+
+```
+$ cd dorita980
+$ npm install
+$ npm run getpassword 192.168.1.103
+> node ./bin/getpassword.js "192.168.1.103"
+
+Make sure your robot is on the Home Base and powered on. Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light.
+Then press any key...
+Looking for robots...
+Robot found! with blid/username: xxxxxxxxxxxxx
+{ ver: '2',
+  hostname: 'Roomba-xxxxxxxxxxxxx',
+  robotname: 'Dorita',
+  ip: '192.168.1.103',
+  mac: '12:12:12:12:12:12',
+  sw: 'v2.0.0-34',
+  sku: 'R98----',
+  nc: 0,
+  proto: 'mqtt' }
+Password=> :1:1486937829:gktkDoYpWaDxCfGh <= Yes, all this string.
+Use this credentials in dorita980 lib :)
+
+```
 
 # Auto discover IP address for local request:
 
