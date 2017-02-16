@@ -164,6 +164,29 @@ dorita980.getRobotIP(function (ierr, ip) {
 });
 ```
 
+You can also use `.discovery` method to get all the robots discovery data:
+
+```javascript
+var dorita980 = require('dorita980');
+
+dorita980.discovery(function (ierr, data) {
+  console.log(data);
+});
+```
+
+Will print:
+```
+{ ver: '2',
+  hostname: 'Roomba-xxxxxxxxxxxxx',
+  robotname: 'Dorita',
+  ip: '192.168.1.103',
+  mac: '12:12:12:12:12:12',
+  sw: 'v2.0.0-34',
+  sku: 'R98----',
+  nc: 0,
+  proto: 'mqtt' }
+```
+
 # Local API
 
 The library send commands direclty over wifi to your robot. You dont need internet connection.
