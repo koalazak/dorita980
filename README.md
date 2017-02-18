@@ -531,10 +531,9 @@ Put your code inside this callback.
 
 Emitted after a disconnection.
 
-#### `offline`
+#### `offline` event
 
 Emitted when the client goes offline.
-
 
 #### `update` event
 
