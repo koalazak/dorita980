@@ -9,13 +9,13 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
 
-# Firmware 2.0.0 documentation
+# Firmware 2.x.x documentation
 
-All this document is only for firmware 2.0.0. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
+All this document is only for firmware 2.x.x. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
 
-If you have firmware version 1.6.6 [click here](https://github.com/koalazak/dorita980/blob/master/READMEv1.6.6.md) to see the old documentation.
+If you have firmware version 1.6.x [click here](https://github.com/koalazak/dorita980/blob/master/READMEv1.6.6.md) to see the old documentation.
 
-There are some breaking changes between 1.6.6 and 2.0.0 in this API (dorita980 v2 and v3).
+There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v2 and v3).
 
 # Features
 
@@ -146,6 +146,8 @@ Use this credentials in dorita980 lib :)
 If you dont known the robot IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
 This process takes 1 or 2 seconds, so if you know the IP just use it explicity.
 
+You need UDP brodcast enable in your network!
+
 ```javascript
 var dorita980 = require('dorita980');
 
@@ -165,6 +167,8 @@ dorita980.getRobotIP(function (ierr, ip) {
 ```
 
 You can also use `.discovery` method to get all the robots discovery data:
+
+You need UDP brodcast enable in your network!
 
 ```javascript
 var dorita980 = require('dorita980');
@@ -612,7 +616,7 @@ Will print the Full robot state!
 
 # Cloud API
 
-Not implemented yet in Firmware 2.0.0
+Not implemented yet in Firmware 2.0.0. [Help wanted!](https://github.com/koalazak/dorita980/issues/25)
 
 ## Note for node.js v0.10 users
 

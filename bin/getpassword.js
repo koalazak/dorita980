@@ -81,7 +81,10 @@ function getBlid (rid, pass) {
 
 function checkV2 () {
   var sliceFrom = 13;
-  discovery();
+  discovery.getRobotPublicInfo(host, function (e, robotData) {
+    console.log('Robot Data:');
+    console.log(robotData);
+  });
   const packet = 'f005efcc3b2900';
   var client = tls.connect(8883, host, {rejectUnauthorized: false}, function () {
     client.write(new Buffer(packet, 'hex'));

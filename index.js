@@ -20,6 +20,7 @@ function local (username, password, ip, version) {
 module.exports = {
   Cloud: cloud,
   Local: local,
-  getRobotIP: discovery,
-  discovery: (cb) => discovery(cb, true)
+  getRobotIP: discovery.discovery,
+  discovery: (cb) => discovery.discovery(cb, true),
+  getRobotPublicInfo: discovery.getRobotPublicInfo
 };
