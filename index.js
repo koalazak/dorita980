@@ -12,8 +12,8 @@ function cloud (username, password, version) {
   return cloudV2(username, password);
 }
 
-function local (username, password, ip, version) {
-  if (version === 1) return localV1(username, password, ip);
+function local (username, password, ip, version, interval) {
+  if (version === 1) return localV1(username, password, ip, interval);
   return localV2(username, password, ip);
 }
 
