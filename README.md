@@ -125,8 +125,6 @@ $ npm run getpassword 192.168.1.103
 
 Make sure your robot is on the Home Base and powered on. Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light.
 Then press any key...
-Looking for robots...
-Robot found! with blid/username: xxxxxxxxxxxxx
 { ver: '2',
   hostname: 'Roomba-xxxxxxxxxxxxx',
   robotname: 'Dorita',
@@ -135,7 +133,9 @@ Robot found! with blid/username: xxxxxxxxxxxxx
   sw: 'v2.0.0-34',
   sku: 'R98----',
   nc: 0,
-  proto: 'mqtt' }
+  proto: 'mqtt',
+  blid: 'xxxxxxxxxxxxx' <---- username/blid
+}
 Password=> :1:1486937829:gktkDoYpWaDxCfGh <= Yes, all this string.
 Use this credentials in dorita980 lib :)
 
