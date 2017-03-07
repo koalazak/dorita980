@@ -9,6 +9,12 @@ With this library you can send commands to your Roomba 980 through the iRobot cl
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
 
+# Advice
+
+If you enjoy dorita980 and works nice for you, I recommend block the internet access to your robot to avoid the OTA firmware updates. This is because changes in new firmware can cause dorita980 to stop working. You can do it through parental control options on your router.
+
+When a new firmware sees the light you can come here to verify if dorita980 is still compatible and allow internet access for your robot to allow the firmware upgrade or not.
+
 # Firmware 2.x.x documentation
 
 All this document is only for firmware 2.x.x. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
@@ -23,7 +29,8 @@ There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v
 - Auto discovery robot IP (optional)
 - Local API control (from your LAN)
 - Simplified Cleaning Preferences settings.
-- Firmware 2.0.0 compatible.
+- Firmware 1.6.x compatible.
+- Firmware 2.x.x compatible.
 - See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 throw.
 
 
@@ -195,14 +202,53 @@ Will print:
 
 The library send commands direclty over wifi to your robot. You dont need internet connection.
 
+* <a href="#Local"><code><b>dorita980.Local(blid, password, ip, firmwareVersion)</b></code></a>
+* <a href="#end"><code>myRobot.<b>end()</b></code></a>
+* <a href="#getRobotState"><code>myRobot.<b>getRobotState(waitForFields)</b></code></a>
+* <a href="#getPreferences"><code>myRobot.<b>getPreferences()</b></code></a>
+* <a href="#setPreferences"><code>myRobot.<b>setPreferences(newPreferences)</b></code></a>
+* <a href="#getMission"><code>myRobot.<b>getMission()</b></code></a>
+* <a href="#getWirelessStatus"><code>myRobot.<b>getWirelessStatus()</b></code></a>
+* <a href="#getTime"><code>myRobot.<b>getTime()</b></code></a>
+* <a href="#getBbrun"><code>myRobot.<b>getBbrun()</b></code></a>
+* <a href="#getLangs"><code>myRobot.<b>getLangs()</b></code></a>
+* <a href="#getSys"><code>myRobot.<b>getSys()</b></code></a>
+* <a href="#getWirelessLastStatus"><code>myRobot.<b>getWirelessLastStatus()</b></code></a>
+* <a href="#getWeek"><code>myRobot.<b>getWeek()</b></code></a>
+* <a href="#setWeek"><code>myRobot.<b>setWeek(newWeek)</b></code></a>
+* <a href="#getCloudConfig"><code>myRobot.<b>getCloudConfig()</b></code></a>
+* <a href="#start"><code>myRobot.<b>start()</b></code></a>
+* <a href="#pause"><code>myRobot.<b>pause()</b></code></a>
+* <a href="#stop"><code>myRobot.<b>stop()</b></code></a>
+* <a href="#resume"><code>myRobot.<b>resume()</b></code></a>
+* <a href="#dock"><code>myRobot.<b>dock()</b></code></a>
+* <a href="#setCarpetBoostAuto"><code>myRobot.<b>setCarpetBoostAuto()</b></code></a>
+* <a href="#setCarpetBoostPerformance"><code>myRobot.<b>setCarpetBoostPerformance()</b></code></a>
+* <a href="#setCarpetBoostEco"><code>myRobot.<b>setCarpetBoostEco()</b></code></a>
+* <a href="#setEdgeCleanOn"><code>myRobot.<b>setEdgeCleanOn()</b></code></a>
+* <a href="#setEdgeCleanOff"><code>myRobot.<b>setEdgeCleanOff()</b></code></a>
+* <a href="#setCleaningPassesAuto"><code>myRobot.<b>setCleaningPassesAuto()</b></code></a>
+* <a href="#setCleaningPassesOne"><code>myRobot.<b>setCleaningPassesOne()</b></code></a>
+* <a href="#setCleaningPassesTwo"><code>myRobot.<b>setCleaningPassesTwo()</b></code></a>
+* <a href="#setAlwaysFinishOn"><code>myRobot.<b>setAlwaysFinishOn()</b></code></a>
+* <a href="#setAlwaysFinishOff"><code>myRobot.<b>setAlwaysFinishOff()</b></code></a>
+* <a href="#connect"><code>myRobot.on(<b>'connect'</b>, callback)</code></a>
+* <a href="#close"><code>myRobot.on(<b>'close'</b>, callback)</code></a>
+* <a href="#offline"><code>myRobot.on(<b>'offline'</b>, callback)</code></a>
+* <a href="#update"><code>myRobot.on(<b>'update'</b>, callback)</code></a>
+* <a href="#mission"><code>myRobot.on(<b>'mission'</b>, callback)</code></a>
+* <a href="#state"><code>myRobot.on(<b>'state'</b>, callback)</code></a>
+
 ## Methods
 
+<a name="end"></a>
 #### `end()`
 
 Close the connection to the robot. Its important if you want to send commands via the official mobile app via Local network. There's maximum 1 connection at any time in local ntwork, so if your app is connected, the official mobile app only works via cloud access.
 
 Meanwhile dorita980 is connect you can call other methods to send commands and listen for the events to get data. Just not call .end() method if you want. Meanwhile dorita980 is connected the official mobile app will then just go via the cloud to send commands to your robot.
 
+<a name="getRobotState"></a>
 #### `getRobotState(Array waitForFields)`
 
 Get robot state but wait for `waitForFields` fields before return.
@@ -327,6 +373,7 @@ Full state should contains:
 
 ```
 
+<a name="getPreferences"></a>
 #### `getPreferences()`
 
 Get full robot state but wait for ['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose'] fields before return.
@@ -335,6 +382,7 @@ Alias for `getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHig
 
 Waiting for 'signal' we are sure we have the full state object.
 
+<a name="setPreferences"></a>
 #### `setPreferences(newPreferences)`
 
 Partial overwrite the robot state to configure it.
@@ -353,7 +401,7 @@ Response:
 {"ok":null}
 ```
 
-
+<a name="getMission"></a>
 #### `getMission()`
 With this you can draw a map :)
 
@@ -372,6 +420,7 @@ With this you can draw a map :)
   pose: { theta: -160, point: { x: 166, y: -11 } } }
 ```
 
+<a name="getWirelessStatus"></a>
 #### `getWirelessStatus()`
 ```javascript
 { wifistat: { wifi: 1, uap: false, cloud: 4 },
@@ -386,11 +435,13 @@ With this you can draw a map :)
      sec: 4 } }
 ```
 
+<a name="getTime"></a>
 #### `getTime()`
 ```javascript
 1487100141
 ```
 
+<a name="getBbrun"></a>
 #### `getBbrun()`
 ```javascript
  { hr: 211,
@@ -407,6 +458,7 @@ With this you can draw a map :)
    nCBump: 0 }
 ```
 
+<a name="getLangs"></a>
 #### `getLangs()`
 ```javascript
  [ { 'en-US': 0 },
@@ -416,6 +468,7 @@ With this you can draw a map :)
    { 'it-IT': 4 } ]
 ```
 
+<a name="getSys"></a>
 #### `getSys()`
 
 ```javascript
@@ -435,12 +488,14 @@ With this you can draw a map :)
   bin: { present: true, full: false } }
 ```
 
+<a name="getWirelessLastStatus"></a>
 #### `getWirelessLastStatus()`
 ```javascript
 { wifi: 1, uap: false, cloud: 4 },
   wlcfg: { sec: 7, ssid: '1234567890796857336364' }
 ```
 
+<a name="getWeek"></a>
 #### `getWeek()`
 Monday disable and every day start at 10:30am
 ```javascript
@@ -449,6 +504,7 @@ Monday disable and every day start at 10:30am
   m: [ 0, 30, 30, 0, 30, 30, 0 ] }
 ```
 
+<a name="setWeek"></a>
 #### `setWeek(newWeek)`
 
 Disable Sunday and set every day at 10:30am
@@ -463,31 +519,37 @@ Response:
 {"ok":null}
 ```
 
+<a name="getCloudConfig"></a>
 #### `getCloudConfig()`
 ```javascript
 prod
 ```
 
+<a name="start"></a>
 #### `start()`
 ```javascript
 {"ok":null}
 ```
 
+<a name="pause"></a>
 #### `pause()`
 ```javascript
 {"ok":null}
 ```
 
+<a name="stop"></a>
 #### `stop()`
 ```javascript
 {"ok":null}
 ```
 
+<a name="resume"></a>
 #### `resume()`
 ```javascript
 {"ok":null}
 ```
 
+<a name="dock"></a>
 #### `dock()`
 Note: before dock you need to pause() or stop() your robot.
 ```javascript
@@ -497,32 +559,43 @@ Note: before dock you need to pause() or stop() your robot.
 ## Simplifications to set Cleaning Preferences:
 This methods use setPreferences() with the correct `flags` for each setting.
 
+<a name="setCarpetBoostAuto"></a>
 #### `setCarpetBoostAuto()`
 ```javascript
 {"ok":null}
 ```
 
+<a name="setCarpetBoostPerformance"></a>
 #### `setCarpetBoostPerformance()`
 
+<a name="setCarpetBoostEco"></a>
 #### `setCarpetBoostEco()`
 
+<a name="setEdgeCleanOn"></a>
 #### `setEdgeCleanOn()`
 
+<a name="setEdgeCleanOff"></a>
 #### `setEdgeCleanOff()`
 
+<a name="setCleaningPassesAuto"></a>
 #### `setCleaningPassesAuto()`
 
+<a name="setCleaningPassesOne"></a>
 #### `setCleaningPassesOne()`
 
+<a name="setCleaningPassesTwo"></a>
 #### `setCleaningPassesTwo()`
 
+<a name="setAlwaysFinishOn"></a>
 #### `setAlwaysFinishOn()`
 
+<a name="setAlwaysFinishOff"></a>
 #### `setAlwaysFinishOff()`
 
 
 ## Events
 
+<a name="connect"></a>
 #### `connect` event
 
 Emitted on successful Connection.
@@ -531,14 +604,17 @@ Emitted on successful Connection.
 
 Put your code inside this callback.
 
+<a name="close"></a>
 #### `close` event
 
 Emitted after a disconnection.
 
+<a name="offline"></a>
 #### `offline` event
 
 Emitted when the client goes offline.
 
+<a name="update"></a>
 #### `update` event
 
 Emitted every time the Robot publish a new message to the mqtt bus.
@@ -565,7 +641,7 @@ Will print:
         umiVer: '5',
         softwareVer: 'v2.0.0-34' } } }
 ```
-
+<a name="mission"></a>
 #### `mission` event
 
 Emitted every `emitIntervalTime` milliseconds with the mission data. (util for mapping)
@@ -599,6 +675,7 @@ Will print each 300ms:
   pose: { theta: -160, point: { x: 166, y: -11 } } }
 ```
 
+<a name="state"></a>
 #### `state` event
 
 Emitted every time the Robot publish a new message to the mqtt bus. 
