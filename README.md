@@ -11,13 +11,13 @@ See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API i
 
 # Advice
 
-If you enjoy dorita980 and works nice for you, I recommend block the internet access to your robot to avoid the OTA firmware updates. This is because changes in new firmware can cause dorita980 to stop working. You can do it through parental control options on your router.
+If you enjoy dorita980 and it works nice for you, I recommend blocking the internet access to your robot to avoid the OTA firmware updates. New firmware changes can cause dorita980 to stop working. Blocking firmware updates can be performed using the parental control options on your router.
 
-When a new firmware sees the light you can come here to verify if dorita980 is still compatible and allow internet access for your robot to allow the firmware upgrade or not.
+When a new firmware is published, you can come here to verify if dorita980 is still compatible. Once dorita980 is compatible you can temporarily enable internet access for your robot to get the firmware upgrade.
 
 # Firmware 2.x.x documentation
 
-All this document is only for firmware 2.x.x. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
+This document is only for firmware 2.x.x. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
 
 If you have firmware version 1.6.x [click here](https://github.com/koalazak/dorita980/blob/master/READMEv1.6.6.md) to see the old documentation.
 
@@ -113,7 +113,7 @@ myRobotViaLocal.on('connect', function () {
 
 (Needed for Cloud and Local requests)
 
-Download or clone this repo then install, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use `dorita980.getRobotIP()` method.
+Download or clone this repo, install it, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use the `dorita980.getRobotIP()` method.
 
 ```bash
 $ git clone https://github.com/koalazak/dorita980.git
@@ -150,8 +150,8 @@ Use this credentials in dorita980 lib :)
 
 # Auto discover IP address for local request:
 
-If you dont known the robot IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
-This process takes 1 or 2 seconds, so if you know the IP just use it explicity.
+If you don't known which IP address to use in `dorita980.Local()` you can use `dorita980.getRobotIP()` to find it.
+This process takes 1-2 seconds, so if you know the IP you can just use it explicity.
 
 You need UDP brodcast enable in your network!
 
@@ -175,7 +175,7 @@ dorita980.getRobotIP(function (ierr, ip) {
 
 You can also use `.discovery` method to get all the robots discovery data:
 
-You need UDP brodcast enable in your network!
+You need UDP brodcast enabled in your network!
 
 ```javascript
 var dorita980 = require('dorita980');
@@ -200,7 +200,7 @@ Will print:
 
 # Local API
 
-The library send commands direclty over wifi to your robot. You dont need internet connection.
+The library send commands direclty over wifi to your robot. You dont need an internet connection.
 
 * <a href="#Local"><code><b>dorita980.Local(blid, password, ip, firmwareVersion)</b></code></a>
 * <a href="#end"><code>myRobot.<b>end()</b></code></a>
@@ -244,16 +244,16 @@ The library send commands direclty over wifi to your robot. You dont need intern
 <a name="end"></a>
 #### `end()`
 
-Close the connection to the robot. Its important if you want to send commands via the official mobile app via Local network. There's maximum 1 connection at any time in local ntwork, so if your app is connected, the official mobile app only works via cloud access.
+Close the connection to the robot. Its important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
 
-Meanwhile dorita980 is connect you can call other methods to send commands and listen for the events to get data. Just not call .end() method if you want. Meanwhile dorita980 is connected the official mobile app will then just go via the cloud to send commands to your robot.
+While dorita980 is connected, you can call other methods to send commands and listen for the events to get data. Just call the `.end()` method if you want. While dorita980 is connected, the official mobile app will only work via the cloud to send commands to your robot.
 
 <a name="getRobotState"></a>
 #### `getRobotState(Array waitForFields)`
 
-Get robot state but wait for `waitForFields` fields before return.
+Get the robot state but wait for the `waitForFields` fields before return.
 
-The robot push data to this state all the time. The state object start empty and the robot will increasing the data here over the time.
+The state object starts empty and the robot will add data over time.
 
 ```javascript
 myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
@@ -261,7 +261,7 @@ myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
 });
 ```
 
-Full state should contains:
+Full state should contain:
 ```javascript
 
 { netinfo:
@@ -376,16 +376,16 @@ Full state should contains:
 <a name="getPreferences"></a>
 #### `getPreferences()`
 
-Get full robot state but wait for ['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose'] fields before return.
+Get the full robot state but wait for the `['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose']` fields before returning.
 
 Alias for `getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose', 'signal'])`
 
-Waiting for 'signal' we are sure we have the full state object.
+Waits for the 'signal' to make sure we have the full state object.
 
 <a name="setPreferences"></a>
 #### `setPreferences(newPreferences)`
 
-Partial overwrite the robot state to configure it.
+Partially overwrites the robot state to configure it.
 
 ```javascript
 var newPreferences = { 
@@ -497,7 +497,7 @@ With this you can draw a map :)
 
 <a name="getWeek"></a>
 #### `getWeek()`
-Monday disable and every day start at 10:30am
+Disable Monday and start every day at 10:30am
 ```javascript
 { cycle: [ 'none', 'none', 'none', 'none', 'none', 'none', 'none' ],
   h: [ 17, 10, 10, 12, 10, 13, 17 ],
@@ -507,7 +507,7 @@ Monday disable and every day start at 10:30am
 <a name="setWeek"></a>
 #### `setWeek(newWeek)`
 
-Disable Sunday and set every day at 10:30am
+Disable Sunday and start every day at 10:30am
 ```javascript
 var newWeek = {"cycle":["none","start","start","start","start","start","start"],"h":[10,10,10,10,10,10,10],"m":[30,30,30,30,30,30,30]}
 myRobotViaLocal.setWeek(newWeek)
@@ -617,7 +617,7 @@ Emitted when the client goes offline.
 <a name="update"></a>
 #### `update` event
 
-Emitted every time the Robot publish a new message to the mqtt bus.
+Emitted every time the Robot publishes a new message to the mqtt bus.
 
 `function (data) {}`
 
