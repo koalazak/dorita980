@@ -238,6 +238,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 * <a href="#update"><code>myRobot.on(<b>'update'</b>, callback)</code></a>
 * <a href="#mission"><code>myRobot.on(<b>'mission'</b>, callback)</code></a>
 * <a href="#state"><code>myRobot.on(<b>'state'</b>, callback)</code></a>
+* <a href="#publish"><code>myRobot.publish(<b>'topic'</b>, <b>rawJsonMessageAsString</b>, callback)</code></a>
 
 ## Methods
 
@@ -591,6 +592,36 @@ This methods use setPreferences() with the correct `flags` for each setting.
 
 <a name="setAlwaysFinishOff"></a>
 #### `setAlwaysFinishOff()`
+
+<a name="publish"></a>
+#### `publish(topic, rawJsonMessageAsString, callback)`
+
+Just to experiment with raw commands using the MQTT client. Known topics are `cmd` and `delta`. But Experiment with other topics and message formats!
+
+The `delta` commands tipicaly have the following json format:
+```
+{'state': newState}
+```
+
+The `cmd` commands tipicaly have the following json format:
+
+```
+{'command': command, time: Date.now() / 1000 | 0, initiator: 'localApp'};
+```
+
+For example to send a start command:
+
+```javascript
+let myCommand = {command: 'start', time: Date.now() / 1000 | 0, initiator: 'localApp'};
+
+myRobotViaLocal.publish('cmd', JSON.stringify(myCommand), function(e) {
+  if(e) console.log('error', e);
+});
+```
+
+Dont forget stringify the json message with `JSON.stringify(rawJsonMessageAsString)`.
+
+You can see undocument commands and preferences in [this thread](https://github.com/koalazak/dorita980/issues/39)
 
 
 ## Events
