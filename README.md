@@ -33,10 +33,33 @@ There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v
 - Firmware 2.x.x compatible.
 - See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 throw.
 
-
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
 Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com/koalazak/rest980).
+
+## Supported Features by Firmware Version
+
+|                                            | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 
+|--------------------------------------------|-------------|---------------|---------------|---------| 
+| Start/Stop/Pause/Dock/Resume               | yes         | yes           | yes           | pending | 
+| Get Preferences                            | yes         | yes           | yes           | pending | 
+| Set Preferences                            | yes         | yes           | yes           | pending | 
+| Get x,y,d Position                         | yes         | yes           | yes           | pending | 
+| Get Mission                                | yes         | yes           | yes           | pending | 
+| Get Mission number                         | no          | no            | yes           | pending | 
+| Get General Info                           | yes         | yes           | yes           | pending | 
+| Get Schedule                               | yes         | yes           | yes           | pending | 
+| Set Schedule                               | yes         | yes           | yes           | pending | 
+| Set CarpetBoost (performance, eco, auto)   | yes         | yes           | yes           | pending | 
+| Set Edge Clean                             | yes         | yes           | yes           | pending | 
+| Set Cleaning Passes (auto, on, two)        | yes         | yes           | yes           | pending | 
+| set Always Finish                          | yes         | yes           | yes           | pending | 
+| MQTT Custom events                         | -           | -             | yes           | pending | 
+| HTTP API                                   | yes         | yes           | -             | -       | 
+| Discovery Robot IP                         | yes         | -             | yes           | -       | 
+| Get BLID and Password                      | yes         | -             | yes           | -       | 
+| Support multiples clients at the same time | yes         | yes           | no            | pending | 
+
 
 # Install
 
