@@ -79,13 +79,13 @@ var dorita980 = require('dorita980');
 
 var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address
 
-myRobotViaLocal.on('connect', function () {
-  myRobotViaLocal.start().then(() => {
-    myRobotViaLocal.end(); // disconnect to leave free the channel for the mobile app.
-  }).catch((err) => {
-    console.log(err);
-  });
-});
+myRobotViaLocal.on('connect', init);
+
+function init () {
+  myRobotViaLocal.start()
+  .then(() => myRobotViaLocal.end()) // disconnect to leave free the channel for the mobile app.
+  .catch(console.log);
+}
 
 ```
 
@@ -105,14 +105,13 @@ var dorita980 = require('dorita980');
 
 var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
 
-myRobotViaLocal.on('connect', function () {
-  // Pause!
-  myRobotViaLocal.pause().then(() => {
-    myRobotViaLocal.end(); // disconnect to leave free the channel for the mobile app.
-  }).catch((err) => {
-    console.log(err);
-  });
-});
+myRobotViaLocal.on('connect', init);
+
+function init () {
+  myRobotViaLocal.pause()
+  .then(() => myRobotViaLocal.end()) // disconnect to leave free the channel for the mobile app.
+  .catch(console.log);
+}
 ```
 
 Get robot week schedule
@@ -122,14 +121,16 @@ var dorita980 = require('dorita980');
 
 var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.168.1.104'); // robot IP address 
 
-myRobotViaLocal.on('connect', function () {
-  myRobotViaLocal.getWeek().then((weekConfig) => {
+myRobotViaLocal.on('connect', init);
+
+function init () {
+  myRobotViaLocal.getWeek()
+  .then((weekConfig) => {
     console.log(weekConfig)
-    myRobotViaLocal.end(); // disconnect to leave free the channel for the mobile app.
-  }).catch((err) => {
-    console.log(err);
-  });
-});
+    myRobotViaLocal.end()
+  })
+  .catch(console.log);
+}
 ```
 
 # How to get your username/blid and password
@@ -181,18 +182,17 @@ You need UDP brodcast enable in your network!
 ```javascript
 var dorita980 = require('dorita980');
 
-dorita980.getRobotIP(function (ierr, ip) {
-  if (!ierr) {
-    var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', ip);
+dorita980.getRobotIP((ierr, ip) => {
+  if (ierr) return console.log('error looking for robot IP');
 
-    myRobotViaLocal.getMission().then((response) => {
-      console.log(response);
-    }).catch((err) => {
-      console.log(err);
-    });
-  } else {
-    console.log('error looking for robot IP');
-  }
+  var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', ip);
+
+  myRobotViaLocal.getMission()
+  .then((mission) => {
+    console.log(mission);
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 ```
 
@@ -203,7 +203,7 @@ You need UDP brodcast enabled in your network!
 ```javascript
 var dorita980 = require('dorita980');
 
-dorita980.discovery(function (ierr, data) {
+dorita980.discovery((ierr, data) => {
   console.log(data);
 });
 ```
