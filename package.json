@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "3.0.11",
+  "version": "3.0.12",
   "description": "Unofficial iRobot Roomba 980 library sdk",
   "main": "./index.js",
   "directories": {
@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/koalazak/dorita980#readme",
   "dependencies": {
-    "mqtt": "^2.4.0",
+    "mqtt": "^2.15.0",
     "request": "^2.74.0",
     "request-promise": "^4.1.1"
   }

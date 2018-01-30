@@ -25,12 +25,14 @@ There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v
 
 # Features
 
-- Get your username/password easily
-- Auto discovery robot IP (optional)
-- Local API control (from your LAN)
+- Compatible robots: all 800 and 900 series with HOME app.
+- Get your username/password easily.
+- Auto discovery robot IP (optional).
+- Local API control (from your LAN).
 - Simplified Cleaning Preferences settings.
 - Firmware 1.6.x compatible.
-- Firmware 2.x.x compatible.
+- Firmware 2.x.x compatible (latest serie 900 uses firmware v2, not v3).
+- Firmware 3.2.x compatible (latest serie 800 uses firmware v3).
 - See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 throw.
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
