@@ -25,7 +25,7 @@ There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v
 
 # Features
 
-- Compatible robots: all 800 and 900 series with HOME app.
+- Compatible robots: all 800, 900 and i7/i7+ series with HOME app.
 - Get your username/password easily.
 - Auto discovery robot IP (optional).
 - Local API control (from your LAN).
