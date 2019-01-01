@@ -2,6 +2,9 @@
   "name": "dorita980",
   "version": "3.0.13",
   "description": "Unofficial iRobot Roomba 980 library sdk",
+  "bin": {
+    "get-roomba-password": "./bin/getpassword.js"
+  },
   "main": "./index.js",
   "directories": {
     "test": "test"

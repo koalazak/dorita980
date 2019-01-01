@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 const request = require('request');
@@ -5,7 +7,7 @@ const tls = require('tls');
 const discovery = require('../lib/discovery');
 
 if (!process.argv[2]) {
-  console.log('Use: npm run getpassword <robot_ip_address> [firmware version]');
+  console.log('Usage: get-roomba-password <robot_ip_address> [firmware version]');
   process.exit();
 }
 
