@@ -3,9 +3,9 @@
 [![dependencies Status](https://david-dm.org/koalazak/dorita980/status.svg)](https://david-dm.org/koalazak/dorita980)
 [![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
 
-Unofficial iRobot Roomba 980 node.js library (SDK).
+Unofficial iRobot Roomba (i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
 
-With this library you can send commands to your Roomba 980 through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
+With this library you can send commands to your wifi enabled Roomba through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
 
@@ -25,7 +25,7 @@ There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v
 
 # Features
 
-- Compatible robots: all 800, 900 and i7/i7+ series with HOME app.
+- Compatible robots: all 600, 800, 900 and i7/i7+ series with HOME app.
 - Get your username/password easily.
 - Auto discovery robot IP (optional).
 - Local API control (from your LAN).
@@ -139,7 +139,16 @@ function init () {
 
 (Needed for Cloud and Local requests)
 
-Download or clone this repo, install it, then run `npm run getpassword`. You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use the `dorita980.getRobotIP()` method.
+You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use the `dorita980.getRobotIP()` method.
+
+Install `dorita980` globally and then run the `get-roomba-password` command:
+
+```bash
+$ npm install -g dorita980
+$ get-roomba-password <robotIP>
+```
+
+or clone the repo and then run the npm script:
 
 ```bash
 $ git clone https://github.com/koalazak/dorita980.git
@@ -151,10 +160,8 @@ $ npm run getpassword <robotIP>
 Example Output:
 
 ```
-$ cd dorita980
-$ npm install
-$ npm run getpassword 192.168.1.103
-> node ./bin/getpassword.js "192.168.1.103"
+$ npm install -g dorita980
+$ get-roomba-password 192.168.1.103
 
 Make sure your robot is on the Home Base and powered on. Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light.
 Then press any key...
