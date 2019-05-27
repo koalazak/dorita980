@@ -1,6 +1,5 @@
 # dorita980
 [![Build Status](https://travis-ci.org/koalazak/dorita980.svg?branch=master)](https://travis-ci.org/koalazak/dorita980)
-[![dependencies Status](https://david-dm.org/koalazak/dorita980/status.svg)](https://david-dm.org/koalazak/dorita980)
 [![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
 
 Unofficial iRobot Roomba (i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
