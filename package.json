@@ -13,7 +13,8 @@
     "test:coverage:run": "istanbul cover _mocha -- $npm_package_config_mocha",
     "test:coverage:check": "istanbul check-coverage --functions 80",
     "test:coverage": "npm run test:coverage:run && npm run test:coverage:check",
-    "getpassword": "node ./bin/getpassword.js"
+    "getpassword": "node ./bin/getpassword.js",
+    "postinstall": "opencollective-postinstall || true"
   },
   "bin": {
     "get-roomba-password": "./bin/getpassword.js"
@@ -64,7 +65,12 @@
   "homepage": "https://github.com/koalazak/dorita980#readme",
   "dependencies": {
     "mqtt": "^2.15.0",
+    "opencollective-postinstall": "^2.0.2",
     "request": "^2.74.0",
     "request-promise": "^4.1.1"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/dorita980"
   }
 }
