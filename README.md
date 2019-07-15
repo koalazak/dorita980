@@ -1,6 +1,6 @@
 # dorita980
 [![Build Status](https://travis-ci.org/koalazak/dorita980.svg?branch=master)](https://travis-ci.org/koalazak/dorita980)
-[![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
+[![Financial Contributors on Open Collective](https://opencollective.com/dorita980/all/badge.svg?label=financial+contributors)](https://opencollective.com/dorita980) [![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
 
 Unofficial iRobot Roomba (i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
 
@@ -769,3 +769,33 @@ $ node --harmony ./bin/getpassword.js "192.168.1.104"
 ## Author
 
 - [Facu ZAK](https://github.com/koalazak) 
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/koalazak/dorita980/graphs/contributors"><img src="https://opencollective.com/dorita980/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/dorita980/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/dorita980"><img src="https://opencollective.com/dorita980/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/dorita980/contribute)]
+
+<a href="https://opencollective.com/dorita980/organization/0/website"><img src="https://opencollective.com/dorita980/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/1/website"><img src="https://opencollective.com/dorita980/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/2/website"><img src="https://opencollective.com/dorita980/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/3/website"><img src="https://opencollective.com/dorita980/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/4/website"><img src="https://opencollective.com/dorita980/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/5/website"><img src="https://opencollective.com/dorita980/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/6/website"><img src="https://opencollective.com/dorita980/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/7/website"><img src="https://opencollective.com/dorita980/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/8/website"><img src="https://opencollective.com/dorita980/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/dorita980/organization/9/website"><img src="https://opencollective.com/dorita980/organization/9/avatar.svg"></a>
