@@ -14,17 +14,13 @@ If you enjoy dorita980 and it works nice for you, I recommend blocking the inter
 
 When a new firmware is published, you can come here to verify if dorita980 is still compatible. Once dorita980 is compatible you can temporarily enable internet access for your robot to get the firmware upgrade.
 
-# Firmware 2.x.x documentation
-
-This document is only for firmware 2.x.x. [Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
-
 If you have firmware version 1.6.x [click here](https://github.com/koalazak/dorita980/blob/master/READMEv1.6.6.md) to see the old documentation.
 
-There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v2 and v3).
+[Check your robot version!](http://homesupport.irobot.com/app/answers/detail/a_id/529)
 
 # Features
 
-- Compatible robots: all 600, 800, 900 and i7/i7+ series with HOME app.
+- Compatible robots: all 600, 800, 900, e5 and i7/i7+ series with HOME app.
 - Get your username/password easily.
 - Auto discovery robot IP (optional).
 - Local API control (from your LAN).
@@ -32,7 +28,7 @@ There are some breaking changes between 1.6.x and 2.x.x in this API (dorita980 v
 - Firmware 1.6.x compatible.
 - Firmware 2.x.x compatible (latest serie 900 uses firmware v2, not v3).
 - Firmware 3.2.x compatible (latest serie 800 uses firmware v3).
-- See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 throw.
+- See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 through it.
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
@@ -40,26 +36,26 @@ Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com
 
 ## Supported Features by Firmware Version
 
-|                                            | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 
-|--------------------------------------------|-------------|---------------|---------------|---------| 
-| Start/Stop/Pause/Dock/Resume               | yes         | yes           | yes           | pending | 
-| Get Preferences                            | yes         | yes           | yes           | pending | 
-| Set Preferences                            | yes         | yes           | yes           | pending | 
-| Get x,y,d Position                         | yes         | yes           | yes           | pending | 
-| Get Mission                                | yes         | yes           | yes           | pending | 
-| Get Mission number                         | no          | no            | yes           | pending | 
-| Get General Info                           | yes         | yes           | yes           | pending | 
-| Get Schedule                               | yes         | yes           | yes           | pending | 
-| Set Schedule                               | yes         | yes           | yes           | pending | 
-| Set CarpetBoost (performance, eco, auto)   | yes         | yes           | yes           | pending | 
-| Set Edge Clean                             | yes         | yes           | yes           | pending | 
-| Set Cleaning Passes (auto, on, two)        | yes         | yes           | yes           | pending | 
-| set Always Finish                          | yes         | yes           | yes           | pending | 
-| MQTT Custom events                         | -           | -             | yes           | pending | 
-| HTTP API                                   | yes         | yes           | -             | -       | 
-| Discovery Robot IP                         | yes         | -             | yes           | -       | 
-| Get BLID and Password                      | yes         | -             | yes           | -       | 
-| Support multiples clients at the same time | yes         | yes           | no            | pending | 
+|                                            | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 3.x.x Local |
+|--------------------------------------------|-------------|---------------|---------------|---------|--------| 
+| Start/Stop/Pause/Dock/Resume               | yes         | yes           | yes           | pending | yes    |
+| Get Preferences                            | yes         | yes           | yes           | pending | yes    |
+| Set Preferences                            | yes         | yes           | yes           | pending | yes    |
+| Get x,y,d Position                         | yes         | yes           | yes           | pending | -      |
+| Get Mission                                | yes         | yes           | yes           | pending | yes    |
+| Get Mission number                         | no          | no            | yes           | pending | yes    |
+| Get General Info                           | yes         | yes           | yes           | pending | yes    |
+| Get Schedule                               | yes         | yes           | yes           | pending | yes    |
+| Set Schedule                               | yes         | yes           | yes           | pending | yes    |
+| Set CarpetBoost (performance, eco, auto)   | yes         | yes           | yes           | pending | -      |
+| Set Edge Clean                             | yes         | yes           | yes           | pending | -      |
+| Set Cleaning Passes (auto, on, two)        | yes         | yes           | yes           | pending | -      |
+| set Always Finish                          | yes         | yes           | yes           | pending | -      |
+| MQTT Custom events                         | -           | -             | yes           | pending | yes    |
+| HTTP API                                   | yes         | yes           | -             | -       | -      |
+| Discovery Robot IP                         | yes         | -             | yes           | -       | yes    |
+| Get BLID and Password                      | yes         | -             | yes           | -       | yes    |
+| Support multiples clients at the same time | yes         | yes           | no            | pending | no     |
 
 
 # Install
