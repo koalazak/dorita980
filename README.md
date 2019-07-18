@@ -152,6 +152,15 @@ $ npm install
 $ npm run getpassword <robotIP>
 ```
 
+or docker run command:
+
+```
+docker run ubuntu apt update \
+   && sudo apt install npm \
+   && sudo npm install -g dorita980 \
+   && get-roomba-password <robotIP>
+```
+
 Example Output:
 
 ```
