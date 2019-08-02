@@ -88,7 +88,7 @@ function checkV2 () {
     console.log(robotData);
   });
   const packet = 'f005efcc3b2900';
-  var client = tls.connect(8883, host, {rejectUnauthorized: false}, function () {
+  var client = tls.connect(8883, host, {rejectUnauthorized: false, ciphers: 'AES128-SHA256'}, function () {
     client.write(new Buffer(packet, 'hex'));
   });
 
