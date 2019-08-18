@@ -38,7 +38,7 @@ Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com
 
 |                                            | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 3.x.x Local |
 |--------------------------------------------|-------------|---------------|---------------|---------|--------| 
-| Start/Stop/Pause/Dock/Resume               | yes         | yes           | yes           | pending | yes    |
+| Clean/Start/Stop/Pause/Dock/Resume         | yes         | yes           | yes           | pending | yes    |
 | Get Preferences                            | yes         | yes           | yes           | pending | yes    |
 | Set Preferences                            | yes         | yes           | yes           | pending | yes    |
 | Get x,y,d Position                         | yes         | yes           | yes           | pending | -      |
@@ -79,7 +79,7 @@ var myRobotViaLocal = new dorita980.Local('MyUsernameBlid', 'MyPassword', '192.1
 myRobotViaLocal.on('connect', init);
 
 function init () {
-  myRobotViaLocal.start()
+  myRobotViaLocal.clean()
   .then(() => myRobotViaLocal.end()) // disconnect to leave free the channel for the mobile app.
   .catch(console.log);
 }
@@ -254,6 +254,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 * <a href="#setWeek"><code>myRobot.<b>setWeek(newWeek)</b></code></a>
 * <a href="#getCloudConfig"><code>myRobot.<b>getCloudConfig()</b></code></a>
 * <a href="#start"><code>myRobot.<b>start()</b></code></a>
+* <a href="#clean"><code>myRobot.<b>clean()</b></code></a>
 * <a href="#pause"><code>myRobot.<b>pause()</b></code></a>
 * <a href="#stop"><code>myRobot.<b>stop()</b></code></a>
 * <a href="#resume"><code>myRobot.<b>resume()</b></code></a>
@@ -568,6 +569,12 @@ prod
 {"ok":null}
 ```
 
+<a name="clean"></a>
+#### `clean()`
+```javascript
+{"ok":null}
+```
+
 <a name="pause"></a>
 #### `pause()`
 ```javascript
@@ -645,10 +652,10 @@ The `cmd` commands tipicaly have the following json format:
 {'command': command, time: Date.now() / 1000 | 0, initiator: 'localApp'};
 ```
 
-For example to send a start command:
+For example to send a clean command:
 
 ```javascript
-let myCommand = {command: 'start', time: Date.now() / 1000 | 0, initiator: 'localApp'};
+let myCommand = {command: 'clean', time: Date.now() / 1000 | 0, initiator: 'localApp'};
 
 myRobotViaLocal.publish('cmd', JSON.stringify(myCommand), function(e) {
   if(e) console.log('error', e);
