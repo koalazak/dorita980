@@ -241,6 +241,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 * <a href="#getPreferences"><code>myRobot.<b>getPreferences()</b></code></a>
 * <a href="#setPreferences"><code>myRobot.<b>setPreferences(newPreferences)</b></code></a>
 * <a href="#getMission"><code>myRobot.<b>getMission()</b></code></a>
+* <a href="#getBasicMission"><code>myRobot.<b>getBasicMission()</b></code></a>
 * <a href="#getWirelessStatus"><code>myRobot.<b>getWirelessStatus()</b></code></a>
 * <a href="#getTime"><code>myRobot.<b>getTime()</b></code></a>
 * <a href="#getBbrun"><code>myRobot.<b>getBbrun()</b></code></a>
@@ -418,6 +419,8 @@ Alias for `getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHig
 
 Waits for the 'signal' to make sure we have the full state object.
 
+Use `getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'signal'])` without `pose` in models without navigation like E6 models.
+
 <a name="setPreferences"></a>
 #### `setPreferences(newPreferences)`
 
@@ -439,7 +442,7 @@ Response:
 
 <a name="getMission"></a>
 #### `getMission()`
-With this you can draw a map :)
+With this you can draw a map :) in models with position reporting. Use `getBasicMission()` in robots without position reporting feature like E5 models.
 
 ```javascript
 { cleanMissionStatus:
@@ -454,6 +457,23 @@ With this you can draw a map :)
      initiator: 'localApp',
      nMssn: 323 },
   pose: { theta: -160, point: { x: 166, y: -11 } } }
+```
+
+<a name="getBasicMission"></a>
+#### `getBasicMission()`
+Sale as `getMission` but don't wait for `pose` information
+```javascript
+{ cleanMissionStatus:
+   { cycle: 'none',
+     phase: 'charge',
+     expireM: 0,
+     rechrgM: 0,
+     error: 0,
+     notReady: 0,
+     mssnM: 15,
+     sqft: 0,
+     initiator: 'localApp',
+     nMssn: 323 }}
 ```
 
 <a name="getWirelessStatus"></a>
@@ -740,7 +760,7 @@ Will print:
 <a name="mission"></a>
 #### `mission` event
 
-Emitted every `emitIntervalTime` milliseconds with the mission data. (util for mapping)
+Emitted every `emitIntervalTime` milliseconds with the mission data. (util for mapping in models with position reporting)
 
 `function (data) {}`
 
