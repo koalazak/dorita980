@@ -581,21 +581,19 @@ prod
 
 `cleanRoom` is an alias for `start` - but with arguments. To clean a room - you need a structure similar to:
 
-```json
-{
-  "command": "start",
-  "initiator": "rmtApp",
-  "time": 1569197045,
-  "ordered": 0,
+```javascript
+const args = {
   "pmap_id": "ABCDEFG123456FGKS789",
   "regions": [
     { "region_id": "5", "region_name": "Hallway", "region_type": "hallway"}
   ],
   "user_pmapv_id": "190917T20125Z"
-}
+};
+
+myRobotViaLocal.cleanRoom(args);
 ```
 
-The easiest way to find this information is to start a clean using the iRobot app and then call the `getRobotState` method and copy the `lastCommand` values from it. Using this you can derive the `pmap_id`, `user_pmapv_id` and `regions` data.
+The easiest way to find this information is to start a clean using the iRobot app and then call the `getRobotState` method and copy the `lastCommand` values from it. Using this you can derive the `pmap_id`, `user_pmapv_id` and `regions` data. Or looking into `pmaps` property in the state.
 
 
 ```javascript
