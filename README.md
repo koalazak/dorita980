@@ -36,26 +36,26 @@ Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com
 
 ## Supported Features by Firmware Version
 
-|                                            | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 3.x.x Local |
-|--------------------------------------------|-------------|---------------|---------------|---------|--------| 
-| Clean/Start/Stop/Pause/Dock/Resume         | yes         | yes           | yes           | pending | yes    |
-| Get Preferences                            | yes         | yes           | yes           | pending | yes    |
-| Set Preferences                            | yes         | yes           | yes           | pending | yes    |
-| Get x,y,d Position                         | yes         | yes           | yes           | pending | -      |
-| Get Mission                                | yes         | yes           | yes           | pending | yes    |
-| Get Mission number                         | no          | no            | yes           | pending | yes    |
-| Get General Info                           | yes         | yes           | yes           | pending | yes    |
-| Get Schedule                               | yes         | yes           | yes           | pending | yes    |
-| Set Schedule                               | yes         | yes           | yes           | pending | yes    |
-| Set CarpetBoost (performance, eco, auto)   | yes         | yes           | yes           | pending | -      |
-| Set Edge Clean                             | yes         | yes           | yes           | pending | -      |
-| Set Cleaning Passes (auto, on, two)        | yes         | yes           | yes           | pending | -      |
-| set Always Finish                          | yes         | yes           | yes           | pending | -      |
-| MQTT Custom events                         | -           | -             | yes           | pending | yes    |
-| HTTP API                                   | yes         | yes           | -             | -       | -      |
-| Discovery Robot IP                         | yes         | -             | yes           | -       | yes    |
-| Get BLID and Password                      | yes         | -             | yes           | -       | yes    |
-| Support multiples clients at the same time | yes         | yes           | no            | pending | no     |
+|                                             | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 3.x.x Local |
+|---------------------------------------------|-------------|---------------|---------------|---------|--------| 
+| Clean/Start/Stop/Pause/Dock/Resume/CleanRoom| yes         | yes           | yes           | pending | yes    |
+| Get Preferences                             | yes         | yes           | yes           | pending | yes    |
+| Set Preferences                             | yes         | yes           | yes           | pending | yes    |
+| Get x,y,d Position                          | yes         | yes           | yes           | pending | -      |
+| Get Mission                                 | yes         | yes           | yes           | pending | yes    |
+| Get Mission number                          | no          | no            | yes           | pending | yes    |
+| Get General Info                            | yes         | yes           | yes           | pending | yes    |
+| Get Schedule                                | yes         | yes           | yes           | pending | yes    |
+| Set Schedule                                | yes         | yes           | yes           | pending | yes    |
+| Set CarpetBoost (performance, eco, auto)    | yes         | yes           | yes           | pending | -      |
+| Set Edge Clean                              | yes         | yes           | yes           | pending | -      |
+| Set Cleaning Passes (auto, on, two)         | yes         | yes           | yes           | pending | -      |
+| set Always Finish                           | yes         | yes           | yes           | pending | -      |
+| MQTT Custom events                          | -           | -             | yes           | pending | yes    |
+| HTTP API                                    | yes         | yes           | -             | -       | -      |
+| Discovery Robot IP                          | yes         | -             | yes           | -       | yes    |
+| Get BLID and Password                       | yes         | -             | yes           | -       | yes    |
+| Support multiples clients at the same time  | yes         | yes           | no            | pending | no     |
 
 
 # Install
@@ -255,6 +255,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 * <a href="#getCloudConfig"><code>myRobot.<b>getCloudConfig()</b></code></a>
 * <a href="#start"><code>myRobot.<b>start()</b></code></a>
 * <a href="#clean"><code>myRobot.<b>clean()</b></code></a>
+* <a href="#cleanRoom"><code>myRobot.<b>cleanRoom(args)</b></code></a>
 * <a href="#pause"><code>myRobot.<b>pause()</b></code></a>
 * <a href="#stop"><code>myRobot.<b>stop()</b></code></a>
 * <a href="#resume"><code>myRobot.<b>resume()</b></code></a>
@@ -571,6 +572,30 @@ prod
 
 <a name="clean"></a>
 #### `clean()`
+```javascript
+{"ok":null}
+```
+
+<a name="cleanRoom"></a>
+#### `cleanRoom(args)`
+
+`cleanRoom` is an alias for `start` - but with arguments. To clean a room - you need a structure similar to:
+
+```javascript
+const args = {
+  "pmap_id": "ABCDEFG123456FGKS789",
+  "regions": [
+    { "region_id": "5", "region_name": "Hallway", "region_type": "hallway"}
+  ],
+  "user_pmapv_id": "190917T20125Z"
+};
+
+myRobotViaLocal.cleanRoom(args);
+```
+
+The easiest way to find this information is to start a clean using the iRobot app and then call the `getRobotState` method and copy the `lastCommand` values from it. Using this you can derive the `pmap_id`, `user_pmapv_id` and `regions` data. Or looking into `pmaps` property in the state.
+
+
 ```javascript
 {"ok":null}
 ```
