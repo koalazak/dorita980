@@ -819,6 +819,13 @@ dorita980 is compatible with node.js > 4.0 But you can use the [getpassword](htt
 $ node --harmony ./bin/getpassword.js "192.168.1.104"
 ```
 
+## Custom tls cipher
+
+You can set `ROBOT_CIPHERS` environment variable to overwrite the cipher suit used in tls connection to the robot. Default is `AES128-SHA256`
+
+```bash
+$ ROBOT_CIPHERS=AES128-SHA node myscript.js
+```
 
 ## Author
 
