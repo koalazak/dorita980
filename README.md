@@ -461,7 +461,7 @@ With this you can draw a map :) in models with position reporting. Use `getBasic
 
 <a name="getBasicMission"></a>
 #### `getBasicMission()`
-Sale as `getMission` but don't wait for `pose` information
+Same as `getMission` but don't wait for `pose` information
 ```javascript
 { cleanMissionStatus:
    { cycle: 'none',
