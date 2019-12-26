@@ -14,7 +14,7 @@ function cloud (username, password, version) {
 
 function local (username, password, ip, version, interval) {
   if (version === 1) return localV1(username, password, ip);
-  return localV2(username, password, ip, interval);
+  return localV2(username, password, ip, interval, version);
 }
 
 module.exports = {
