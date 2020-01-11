@@ -4,6 +4,7 @@
 
 Unofficial iRobot Roomba (i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
 
+
 With this library you can send commands to your wifi enabled Roomba through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
@@ -20,7 +21,7 @@ If you have firmware version 1.6.x [click here](https://github.com/koalazak/dori
 
 # Features
 
-- Compatible robots: all 600, 800, 900, e5 and i7/i7+ series with HOME app.
+- Compatible robots: all 600, 800, 900, e5 and i7/i7+ series with HOME app and Braava m6.
 - Get your username/password easily.
 - Auto discovery robot IP (optional).
 - Local API control (from your LAN).
