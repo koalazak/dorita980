@@ -601,9 +601,11 @@ prod
 
 ```javascript
 const args = {
+  "ordered": "1",  
   "pmap_id": "ABCDEFG123456FGKS789",
   "regions": [
-    { "region_id": "5", "region_name": "Hallway", "region_type": "hallway"}
+    { "region_id": "5", "region_name": "Hallway", "region_type": "hallway"},
+    { "region_id": "3", "region_name": "Living Room", "region_type": "family_room"}
   ],
   "user_pmapv_id": "190917T20125Z"
 };
