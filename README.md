@@ -234,7 +234,7 @@ Will print:
 
 # Local API
 
-The library send commands direclty over wifi to your robot. You dont need an internet connection.
+The library send commands directly over wifi to your robot. You dont need an internet connection.
 
 * <a href="#Local"><code><b>dorita980.Local(blid, password, ip, firmwareVersion)</b></code></a>
 * <a href="#end"><code>myRobot.<b>end()</b></code></a>
@@ -282,7 +282,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 <a name="end"></a>
 #### `end()`
 
-Close the connection to the robot. Its important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
+Close the connection to the robot. It's important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
 
 While dorita980 is connected, you can call other methods to send commands and listen for the events to get data. Just call the `.end()` method if you want. While dorita980 is connected, the official mobile app will only work via the cloud to send commands to your robot.
 
