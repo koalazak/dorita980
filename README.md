@@ -601,7 +601,7 @@ prod
 
 ```javascript
 const args = {
-  "ordered": "1",  
+  "ordered": 1,  
   "pmap_id": "ABCDEFG123456FGKS789",
   "regions": [
     { "region_id": "5", "region_name": "Hallway", "region_type": "hallway"},
