@@ -234,7 +234,7 @@ Will print:
 
 # Local API
 
-The library send commands direclty over wifi to your robot. You dont need an internet connection.
+The library send commands directly over wifi to your robot. You dont need an internet connection.
 
 * <a href="#Local"><code><b>dorita980.Local(blid, password, ip, firmwareVersion)</b></code></a>
 * <a href="#end"><code>myRobot.<b>end()</b></code></a>
@@ -255,6 +255,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 * <a href="#start"><code>myRobot.<b>start()</b></code></a>
 * <a href="#clean"><code>myRobot.<b>clean()</b></code></a>
 * <a href="#cleanRoom"><code>myRobot.<b>cleanRoom(args)</b></code></a>
+* <a href="#cleanRoomMultiple"><code>myRobot.<b>cleanRoom(args) for multiple rooms</b></code></a>
 * <a href="#pause"><code>myRobot.<b>pause()</b></code></a>
 * <a href="#stop"><code>myRobot.<b>stop()</b></code></a>
 * <a href="#resume"><code>myRobot.<b>resume()</b></code></a>
@@ -282,7 +283,7 @@ The library send commands direclty over wifi to your robot. You dont need an int
 <a name="end"></a>
 #### `end()`
 
-Close the connection to the robot. Its important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
+Close the connection to the robot. It's important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
 
 While dorita980 is connected, you can call other methods to send commands and listen for the events to get data. Just call the `.end()` method if you want. While dorita980 is connected, the official mobile app will only work via the cloud to send commands to your robot.
 
@@ -603,7 +604,7 @@ prod
 const args = {
   "pmap_id": "ABCDEFG123456FGKS789",
   "regions": [
-    { "region_id": "5", "region_name": "Hallway", "region_type": "hallway"}
+    { "region_id": "5", "region_name": "Hallway", "region_type": "hallway", "type": "rid"}
   ],
   "user_pmapv_id": "190917T20125Z"
 };
@@ -611,8 +612,31 @@ const args = {
 myRobotViaLocal.cleanRoom(args);
 ```
 
+```javascript
+{"ok":null}
+```
+
 The easiest way to find this information is to start a clean using the iRobot app and then call the `getRobotState` method and copy the `lastCommand` values from it. Using this you can derive the `pmap_id`, `user_pmapv_id` and `regions` data. Or looking into `pmaps` property in the state.
 
+<a name="cleanRoomMultiple"></a>
+#### `cleanRoom(args)` for multiple rooms
+By adding more regions to the regions array, a set of rooms will be cleaned.
+At least from firmware Version 3.8.3 you can set the desired order, when cleaning multiple rooms by adding `ordered = 1`:
+
+```javascript
+const args = {
+  "ordered": 1,
+  "pmap_id": "ABCDEFG123456FGKS789",
+  "regions": [
+    { "region_id": "5", "region_name": "Hallway", "region_type": "hallway", "type": "rid"},
+    { "region_id": "0", "region_name": "living room", "region_type": "familiy room", "type": "rid"},
+    { "region_id": "1", "region_name": "kitchen", "region_type": "kitchen", "type": "rid"}
+  ],
+  "user_pmapv_id": "190917T20125Z"
+};
+
+myRobotViaLocal.cleanRoom(args);
+```
 
 ```javascript
 {"ok":null}

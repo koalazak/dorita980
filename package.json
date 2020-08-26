@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "3.1.7",
+  "version": "3.1.8",
   "description": "Unofficial iRobot Roomba 980 and wifi other enabled series library sdk",
   "main": "./index.js",
   "directories": {
