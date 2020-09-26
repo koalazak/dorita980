@@ -12,9 +12,9 @@ function cloud (username, password, version) {
   return cloudV2(username, password);
 }
 
-function local (username, password, ip, version, interval) {
+function local (username, password, ip, version, interval, model) {
   if (version === 1) return localV1(username, password, ip);
-  return localV2(username, password, ip, interval, version);
+  return localV2(username, password, ip, interval, version, model);
 }
 
 module.exports = {
