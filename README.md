@@ -31,6 +31,8 @@ If you have firmware version 1.6.x [click here](https://github.com/koalazak/dori
 - Firmware 3.2.x compatible (latest serie 800 uses firmware v3).
 - See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 through it.
 
+Latest firmware tested and working: `v2.4.16-126`
+
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
 Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com/koalazak/rest980).
@@ -137,6 +139,8 @@ function init () {
 
 You need to know your robot IP address (look in your router or scan your LAN network with nmap to find it). Or use the `dorita980.getRobotIP()` method.
 
+** Option 1 **
+
 Install `dorita980` globally and then run the `get-roomba-password` command:
 
 ```bash
@@ -144,7 +148,9 @@ $ npm install -g dorita980
 $ get-roomba-password <robotIP>
 ```
 
-or clone the repo and then run the npm script:
+** Option 2 **
+
+Clone the repo and then run the npm script:
 
 ```bash
 $ git clone https://github.com/koalazak/dorita980.git
@@ -153,13 +159,15 @@ $ npm install
 $ npm run getpassword <robotIP>
 ```
 
-or docker run command:
+** Option 3 **
+
+Docker run command:
 
 ```
 docker run -it node sh -c "npm install -g dorita980 && get-roomba-password <robotIP>"
 ```
 
-Example Output:
+** Example Output **
 
 ```
 $ npm install -g dorita980
@@ -182,6 +190,20 @@ Password=> :1:1486937829:gktkDoYpWaDxCfGh <= Yes, all this string.
 Use this credentials in dorita980 lib :)
 
 ```
+
+### Troubleshoot - Getting the password
+
+Most common issues getting your password are related with:
+
+- Mobile application is open: You must close iRobot mobile application on your phone. The robot only support ONE connection at time. You will get a connection error if this is the case.
+- Other applications are using your robot: Close all your applications or scripts using the robot. Same as frist bullet.
+- Network connectivity issues: Make sure your computer can reach your robot: `nc -zv <robot_ip> 8883` if this command fails check your network.
+- Slow networks: On some slow networks you need to run the `get-roomba-password` a couple of times until you get it. This is because UDP packages may be lost.
+- node.js version: Mostly tested on v10 but also works on v12, v14 and v16. Try using v10.
+- Wrong button: It is really common people touching CLEAN button on 980 robots instead of HOME button when prompted. Make sure you are pressing the correct button. Some model (like 675) do not have HOME button and you need to press DOCK+SPOT.
+- Make sure your robot is docked on the Home Base and powered on (short press Clean button once to turn it on. But do not start a cleaning session!)
+- Robot not configured: Did you configure the Robot for first time with the mobile app? If not, you need to do that first. This process set the actual password.
+- Sometimes the robot hangs: Reset the robot pressing Clean for 10 seconds aprox. Wait for restart and try again.
 
 # Auto discover IP address for local request:
 
