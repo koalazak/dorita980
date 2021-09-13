@@ -88,7 +88,7 @@ function checkV2 () {
     console.log(robotData);
   });
   const packet = 'f005efcc3b2900';
-  var client = tls.connect(8883, host, {rejectUnauthorized: false, ciphers: process.env.ROBOT_CIPHERS || 'AES128-SHA256'}, function () {
+  var client = tls.connect(8883, host, {timeout: 10000, rejectUnauthorized: false, ciphers: process.env.ROBOT_CIPHERS || 'AES128-SHA256'}, function () {
     client.write(new Buffer(packet, 'hex'));
   });
 
@@ -110,7 +110,7 @@ function checkV2 () {
   client.setEncoding('utf-8');
 }
 
-console.log('Make sure your robot is on the Home Base and powered on (green lights on). Then press and hold the HOME button on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light.');
+console.log('Make sure your robot is on the Home Base and powered on (green lights on). Then press and hold the HOME button (or DOCK+SPOT on some models) on your robot until it plays a series of tones (about 2 seconds). Release the button and your robot will flash WIFI light.');
 
 if (fversion === '1') {
   console.log('Then wait and look here...');
