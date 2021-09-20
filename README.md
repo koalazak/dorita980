@@ -41,7 +41,7 @@ Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com
 
 |                                             | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 3.x.x Local |
 |---------------------------------------------|-------------|---------------|---------------|---------|--------| 
-| Clean/Start/Stop/Pause/Dock/Resume/CleanRoom| yes         | yes           | yes           | pending | yes    |
+| Clean/Start/Stop/Pause/Dock/Resume/CleanRoom/Find| yes         | yes           | yes           | pending | yes    |
 | Get Preferences                             | yes         | yes           | yes           | pending | yes    |
 | Set Preferences                             | yes         | yes           | yes           | pending | yes    |
 | Get x,y,d Position                          | yes         | yes           | yes           | pending | -      |
@@ -685,6 +685,12 @@ myRobotViaLocal.cleanRoom(args);
 <a name="dock"></a>
 #### `dock()`
 Note: before dock you need to pause() or stop() your robot.
+```javascript
+{"ok":null}
+```
+<a name="find"></a>
+#### `find()`
+Note: sends locate request. If the robot is on dock nothing will happen, otherwise it will beep.
 ```javascript
 {"ok":null}
 ```
