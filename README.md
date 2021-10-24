@@ -9,6 +9,10 @@ With this library you can send commands to your wifi enabled Roomba through the 
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
 
+## Help wanted to support J7 robot!
+
+[Help here](https://github.com/koalazak/dorita980/issues/142)
+
 # Advice
 
 If you enjoy dorita980 and it works nice for you, I recommend blocking the internet access to your robot to avoid the OTA firmware updates. New firmware changes can cause dorita980 to stop working. Blocking firmware updates can be performed using the parental control options on your router.
@@ -879,6 +883,20 @@ You can set `ROBOT_CIPHERS` environment variable to overwrite the cipher suit us
 ```bash
 $ ROBOT_CIPHERS=AES128-SHA node myscript.js
 ```
+
+# Donations
+
+If you'd like to help dorita980 stay updated and support new robots and firmwares please consider making a donation to help me purchase the latest robots.
+
+|  Method        | Wallet                                     | 
+|----------------|--------------------------------------------|
+| Bitcoin        | bc1qepwdmdk25yxa39g9kerzw9m5y7nxztwkmcu3aa |
+| Etherum        | 0x7EcE75b4fc6A2109850a106b58Dcf750C6B0CdE3 |
+| OpenColective  | [opencollective](https://opencollective.com/dorita980)       |
+| Paypal         | zak.tux@gmail.com                          |
+| Others         | Ask me                                     |
+
+Thank you very much for your support!
 
 ## Author
 
