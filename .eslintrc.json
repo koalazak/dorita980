@@ -9,7 +9,7 @@
     "standard"
   ],
   "rules": {
-    "complexity": ["warn", 10],
+    "complexity": 0,
     "max-depth": ["warn", 4],
     "no-unused-vars": ["warn", { "vars": "all", "args": "after-used" }]
   }
