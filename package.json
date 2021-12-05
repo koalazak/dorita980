@@ -1,6 +1,6 @@
 {
   "name": "dorita980",
-  "version": "3.1.10",
+  "version": "3.1.11",
   "description": "Unofficial iRobot Roomba 980 and wifi other enabled series library sdk",
   "main": "./index.js",
   "directories": {
@@ -13,10 +13,12 @@
     "test:coverage:run": "istanbul cover _mocha -- $npm_package_config_mocha",
     "test:coverage:check": "istanbul check-coverage --functions 80",
     "test:coverage": "npm run test:coverage:run && npm run test:coverage:check",
-    "getpassword": "node ./bin/getpassword.js"
+    "getpassword": "node ./bin/getpassword.js",
+    "get-password-cloud": "node ./bin/getPasswordCloud.js"
   },
   "bin": {
-    "get-roomba-password": "./bin/getpassword.js"
+    "get-roomba-password": "./bin/getpassword.js",
+    "get-roomba-password-cloud": "./bin/getPasswordCloud.js"
   },
   "repository": {
     "type": "git",
