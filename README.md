@@ -165,7 +165,7 @@ $ npm run get-password-cloud <iRobot Username> <iRobot Password> [Optional API-K
 Docker run command:
 
 ```
-docker run -it node sh -c "npm install -g dorita980 && get-roomba-password-cloud <robotIP>"
+docker run -it node sh -c "npm install -g dorita980 && get-roomba-password-cloud <iRobot Username> <iRobot Password> [Optional API-Key]"
 ```
 ** Example Output **
 
