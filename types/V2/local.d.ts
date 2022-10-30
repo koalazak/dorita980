@@ -6,14 +6,33 @@ export class Local {
    */
   end(): void;
   getTime(): Promise<number>;
-  getBbrun(): Promise<Bbrun>;
+  getBbrun(): Promise<Pick<RobotState, 'bbrun'>>;
   getLangs(): Promise<[{ 'en-US': 0; },
     { 'fr-FR': 1; },
     { 'es-ES': 2; },
     { 'de-DE': 3; },
     { 'it-IT': 4; }] | Record<string, number>[]>;
-  getSys(): Promise<Sys>;
-  getWirelessLastStatus(): Promise<WirelessLastStatus>;
+  getSys(): Promise<{
+    bbrstinfo: Pick<RobotState, 'bbrstinfo'>,
+    cap: Pick<RobotState, 'cap'>;
+    sku: Pick<RobotState, 'sku'>,
+    batteryType: Pick<RobotState, 'batteryType'>,
+    soundVer: Pick<RobotState, 'soundVer'>,
+    uiSwVer: Pick<RobotState, 'uiSwVer'>,
+    navSwVer: Pick<RobotState, 'navSwVer'>,
+    wifiSwVer: Pick<RobotState, 'wifiSwVer'>,
+    mobilityVer: Pick<RobotState, 'mobilityVer'>,
+    bootloaderVer: Pick<RobotState, 'bootloaderVer'>,
+    umiVer: Pick<RobotState, 'umiVer'>,
+    softwareVer: Pick<RobotState, 'softwareVer'>,
+    audio: Pick<RobotState, 'audio'>,
+    bin: Pick<RobotState, 'bin'>;
+  }
+  >;
+  getWirelessLastStatus(): Promise<{
+    wifistat: Pick<RobotState, 'wifistat'>,
+    wlcfg: Pick<RobotState, 'wlcfg'>;
+  }>;
   /**
      * @example starts every day at `10:30am` except Monday:
      * ```
@@ -26,11 +45,7 @@ export class Local {
      * }
      * ```
      */
-  getWeek(): Promise<{
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-    h: [number, number, number, number, number, number, number],
-    m: [number, number, number, number, number, number, number];
-  }>;
+  getWeek(): Promise<Pick<RobotState, 'cleanSchedule'>>;
   /**
    * Get the full robot state but wait for the `['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose']` fields before returning.
    *
@@ -40,7 +55,13 @@ export class Local {
    *
    * Use {@link getRobotState() getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'signal'])} without `pose` in models without navigation like E6 models.
    */
-  getPreferences(): Promise<RobotState>;
+  getPreferences(): Promise<{
+    cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
+    cleanSchedule: Pick<RobotState, 'cleanSchedule'>;
+    name: Pick<RobotState, 'name'>;
+    vacHigh: Pick<RobotState, 'vacHigh'>;
+    signal: Pick<RobotState, 'signal'>;
+  }>;
   /**
  * Partially overwrites the robot state to configure it.
  * 
@@ -52,7 +73,14 @@ export class Local {
  * myRobotViaLocal.setPreferences(newPreferences)
  * ```
  */
-  setPreferences(newPreferences: Record<string, any>): Promise<{ ok: null; }>;
+  setPreferences(newPreferences: Record<string, Partial<{
+    carpetBoost: Pick<RobotState, 'carpetBoost'>;
+    vacHigh: Pick<RobotState, 'vacHigh'>;
+    openOnly: Pick<RobotState, 'openOnly'>;
+    noAutoPasses: Pick<RobotState, 'noAutoPasses'>;
+    twoPass: Pick<RobotState, 'twoPass'>;
+    binPause: Pick<RobotState, 'binPause'>;
+  }>>): Promise<{ ok: null; }>;
   /**
    * Get the robot state but wait for the `waitForFields` fields before return.
    * 
@@ -64,19 +92,46 @@ export class Local {
    * });
    * ```
    */
-  getRobotState(waitForFields?: string[]): Promise<RobotState>;
+  getRobotState<WaitForFields extends (keyof RobotState)[]>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields[number]>>;
+  /**
+ * Get the robot state but wait for the `waitForFields` fields before return.
+ * 
+ * The state object starts empty and the robot will add data over time.
+ * 
+ * @example```
+ * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
+ *   console.log(actualState);
+ * });
+ * ```
+ */
+  getRobotState(): Promise<{}>;
   /**
    * With this you can draw a map :) in models with position reporting. Use {@link getBasicMission()} in robots without position reporting feature like E5 models.
    */
-  getMission(): Promise<Mission>;
+  getMission(): Promise<{
+    cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
+    bin: Pick<RobotState, 'bin'>;
+    batPct: Pick<RobotState>;
+    pose?: Pick<RobotState, 'pose'>;
+  }>;
   /**
    * Same as {@link getMission()} but don't wait for `pose` information
    */
-  getBasicMission(): Promise<BasicMission>;
-  getWirelessConfig(): Promise<any>;
-  getWirelessStatus(): Promise<WirelessStatus>;
-  getCloudConfig(): Promise<'prod' | string>;
-  getSKU(): Promise<any>;
+  getBasicMission(): Promise<{
+    cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
+    bin: Pick<RobotState, 'bin'>;
+    batPct: Pick<RobotState>;
+  }>;
+  getWirelessConfig(): Promise<{
+    wlcfg: Pick<RobotState, 'wlcfg'>;
+    netinfo: Pick<RobotState, 'netinfo'>;
+  }>;
+  getWirelessStatus(): Promise<{
+    wifistat: Pick<RobotState, 'wifistat'>;
+    netinfo: Pick<RobotState, 'netinfo'>;
+  }>;
+  getCloudConfig(): Promise<Pick<RobotState, 'cloudEnv'>>;
+  getSKU(): Promise<string>;
   start(): Promise<{ ok: null; }>;
   clean(): Promise<{ ok: null; }>;
   pause(): Promise<{ ok: null; }>;
@@ -97,11 +152,7 @@ export class Local {
      * myRobotViaLocal.setWeek(newWeek)
      * ```
      */
-  setWeek(week: {
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-    h: [number, number, number, number, number, number, number],
-    m: [number, number, number, number, number, number, number];
-  }): Promise<{ ok: null; }>;
+  setWeek(week: Pick<RobotState, 'cleanSchedule'>): Promise<{ ok: null; }>;
   /** This method uses {@link setPreferences()} with the correct `flags` for each setting */
   setCarpetBoostAuto(): Promise<{ ok: null; }>;
   /** This method uses {@link setPreferences()} with the correct `flags` for each setting */
@@ -151,9 +202,18 @@ export class Local {
   /** Emitted when the client goes offline. */
   on(event: 'offline', callback: () => void): this;
   /** Emitted every time the Robot publishes a new message to the mqtt bus. */
-  on(event: 'update', callback: (data: Update) => void): this;
+  on(event: 'update', callback: (data: {
+    state: {
+      reported: Partial<RobotState>;
+    };
+  }) => void): this;
   /** Emitted every `emitIntervalTime` milliseconds with the mission data. (util for mapping in models with position reporting) */
-  on(event: 'mission', callback: (data: Mission) => void): this;
+  on(event: 'mission', callback: (data: {
+    cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
+    bin: Pick<RobotState, 'bin'>;
+    batPct: Pick<RobotState>;
+    pose?: Pick<RobotState, 'pose'>;
+  }) => void): this;
   /** 
    * Emitted every time the Robot publish a new message to the mqtt bus. 
    * 
@@ -161,60 +221,8 @@ export class Local {
    */
   on(event: 'state', callback: (data: RobotState) => void): this;
 }
-interface Update {
-  state:
-  {
-    reported:
-    {
-      soundVer: string,
-      uiSwVer: string,
-      navSwVer: string,
-      wifiSwVer: string,
-      mobilityVer: string,
-      bootloaderVer: string,
-      umiVer: string,
-      softwareVer: string;
-    };
-  };
-}
-interface WirelessLastStatus {
-  wifistat: { wifi: number, uap: boolean, cloud: number; },
-  wlcfg: { sec: number, ssid: string; },
-}
-interface Sys {
-  bbrstinfo: { nNavRst: number, nMobRst: number, causes: '0000'; },
-  cap: { pose: number, ota: number, multiPass: number, carpetBoost: number; },
-  sku: string,
-  batteryType: 'lith' | string,
-  soundVer: string,
-  uiSwVer: string,
-  navSwVer: string,
-  wifiSwVer: string,
-  mobilityVer: string,
-  bootloaderVer: string,
-  umiVer: string,
-  softwareVer: string,
-  audio: { active: boolean; },
-  bin: { present: boolean, full: boolean; };
-}
-interface Bbrun {
-  hr: number,
-  min: number,
-  sqft: number,
-  nStuck: number,
-  nScrubs: number,
-  nPicks: number,
-  nPanics: number,
-  nCliffsF: number,
-  nCliffsR: number,
-  nMBStll: number,
-  nWStll: number,
-  nCBump: number;
-}
-interface WirelessStatus {
-  wifistat: { wifi: number, uap: boolean, cloud: number; },
-  netinfo:
-  {
+interface RobotState {
+  netinfo: {
     dhcp: boolean,
     addr: number,
     mask: number,
@@ -223,76 +231,31 @@ interface WirelessStatus {
     dns2: number,
     bssid: string,
     sec: number;
-  },
-}
-interface BasicMission {
-  cleanMissionStatus:
-  {
-    cycle: 'none' | string,
-    phase: 'charge' | string,
-    expireM: number,
-    rechrgM: number,
-    error: number,
-    notReady: number,
-    mssnM: number,
-    sqft: number,
-    initiator: 'manual' | 'localApp' | string,
-    nMssn: number;
-  },
-}
-interface Mission {
-  cleanMissionStatus:
-  {
-    cycle: 'none' | string,
-    phase: 'charge' | string,
-    expireM: number,
-    rechrgM: number,
-    error: number,
-    notReady: number,
-    mssnM: number,
-    sqft: number,
-    initiator: 'manual' | 'localApp' | string,
-    nMssn: number;
-  },
-  pose: { theta: number, point: { x: number, y: number; }; },
-}
-
-interface RobotState extends Record<string, any> {
-  netinfo:
-  {
-    dhcp: boolean,
-    addr: number,
-    mask: number,
-    gw: number,
-    dns1: number,
-    dns2: number,
-    bssid: string,
-    sec: number;
-  },
-  wifistat: { wifi: number, uap: boolean, cloud: number; },
-  wlcfg: { sec: number, ssid: string; },
+  } | Record<string, boolean | number | string>,
+  wifistat: { wifi: number, uap: boolean, cloud: number; } | Record<string, boolean | number>,
+  wlcfg: { sec: number, ssid: string; } | Record<string, number | string>;
   mac: string,
   country: 'US' | string,
   cloudEnv: 'prod' | string,
-  svcEndpoints: { svcDeplId: string; },
+  svcEndpoints: { svcDeplId: 'v011' | string; } | Record<string, string>,
+  mapUploadAllowed: boolean,
   localtimeoffset: number,
   utctime: number,
-  pose: { theta: number, point: { x: number, y: number; }; },
+  pose: { theta: number, point: { x: number, y: number; }; } | Record<string, any>,
   batPct: number,
   dock: { known: boolean; },
   bin: { present: boolean, full: boolean; },
   audio: { active: boolean; },
-  cleanMissionStatus:
-  {
-    cycle: 'none' | string,
-    phase: 'charge' | string,
+  cleanMissionStatus: {
+    cycle: 'none' | 'clean' | string,
+    phase: 'charge' | 'stuck' | 'run' | 'hmUsrDock' | string,
     expireM: number,
     rechrgM: number,
     error: number,
     notReady: number,
     mssnM: number,
     sqft: number,
-    initiator: 'manual' | 'localApp' | string,
+    initiator: '' | 'manual' | 'localApp' | string,
     nMssn: number;
   },
   language: number,
@@ -305,52 +268,61 @@ interface RobotState extends Record<string, any> {
   openOnly: boolean,
   twoPass: boolean,
   schedHold: boolean,
-  lastCommand: { command: 'dock' | string, time: number, initiator: 'manual' | string; },
-  langs:
-  [{ 'en-US': 0; },
+  lastCommand: { command: 'none' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; },
+  langs: [
+    { 'en-US': 0; },
     { 'fr-FR': 1; },
     { 'es-ES': 2; },
     { 'de-DE': 3; },
-    { 'it-IT': 4; }] | Record<string, number>[];
-  bbnav: { aMtrack: number, nGoodLmrks: number, aGain: number, aExpo: number; },
-  bbpanic: { panics: number[]; },
-  bbpause: { pauses: number[]; },
-  bbmssn:
-  {
+    { 'it-IT': 4; }
+  ] | Record<string, number>[],
+  bbnav: { aMtrack: number, nGoodLmrks: number, aGain: number, aExpo: number; } | Record<string, number>;
+  bbpanic: { panics: number[]; } | Record<string, number[]>,
+  bbpause: {
+    pauses: number[];
+  } | Record<string, number>,
+  bbmssn: {
     nMssn: number,
     nMssnOk: number,
     nMssnC: number,
     nMssnF: number,
     aMssnM: number,
     aCycleM: number;
-  },
-  bbrstinfo: { nNavRst: number, nMobRst: number, causes: string; },
-  cap: { pose: number, ota: number, multiPass: number, carpetBoost: number; },
-  sku: string,
+  } | Record<string, number>,
+  bbrstinfo: { nNavRst: number, nMobRst: number, causes: string; } | Record<string, number | string>,
+  cap: {
+    pose: number,
+    ota: number,
+    multiPass: number,
+    carpetBoost: number,
+    pp: number,
+    binFullDetect: number,
+    langOta: number,
+    maps: number,
+    edge: number,
+    eco: number,
+    svcConf: number;
+  } | Record<string, number>,
+  hardwareRev: number,
+  sku: 'R985020' | string,
   batteryType: 'lith' | string,
-  soundVer: string,
-  uiSwVer: string,
-  navSwVer: string,
-  wifiSwVer: string,
-  mobilityVer: string,
-  bootloaderVer: string,
-  umiVer: string,
-  softwareVer: string,
-  tz:
-  {
-    events: { dt: number, off: number; }[],
-    ver: 2;
-  },
-  timezone: 'America/Buenos_Aires' | string,
+  soundVer: '31' | string,
+  uiSwVer: '4582' | string,
+  navSwVer: '01.12.01#1' | string,
+  wifiSwVer: '20992' | string,
+  mobilityVer: '5865' | string,
+  bootloaderVer: '4042' | string,
+  umiVer: '6' | string,
+  softwareVer: 'v2.4.8-44' | string,
+  tz: { events: { dt: number, off: number; }[], ver: 16 | number; },
+  timezone: 'America/Los_Angeles' | string,
   name: string,
-  cleanSchedule:
-  {
+  cleanSchedule: {
     cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
     h: [number, number, number, number, number, number, number],
     m: [number, number, number, number, number, number, number];
   },
-  bbchg3:
-  {
+  bbchg3: {
     avgMin: number,
     hOnDock: number,
     nAvail: number,
@@ -358,11 +330,10 @@ interface RobotState extends Record<string, any> {
     nLithChrg: number,
     nNimhChrg: number,
     nDocks: number;
-  },
-  bbchg: { nChgOk: number, nLithF: number, aborts: number[]; },
-  bbswitch: { nBumper: number, nClean: number, nSpot: number, nDock: number, nDrops: number; },
-  bbrun:
-  {
+  } | Record<string, number>,
+  bbchg: { nChgOk: number, nLithF: number, aborts: number[]; } | Record<string, number | number[]>,
+  bbswitch: { nBumper: number, nClean: number, nSpot: number, nDock: number, nDrops: number; } | Record<string, number>,
+  bbrun: {
     hr: number,
     min: number,
     sqft: number,
@@ -375,7 +346,7 @@ interface RobotState extends Record<string, any> {
     nMBStll: number,
     nWStll: number,
     nCBump: number;
-  },
+  } | Record<string, number>,
   bbsys: { hr: number, min: number; },
   signal: { rssi: number, snr: number; };
 }

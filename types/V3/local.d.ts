@@ -175,31 +175,15 @@ export class Local {
   /** Emitted when the client goes offline. */
   on(event: 'offline', callback: () => void): this;
   /** Emitted every time the Robot publishes a new message to the mqtt bus. */
-  on(event: 'update', callback: (data: Update) => void): this;
+  on(event: 'update', callback: (data: Partial<RobotState>) => void): this;
   /** Emitted every `emitIntervalTime` milliseconds with the mission data. (util for mapping in models with position reporting) */
-  on(event: 'mission', callback: (data: Mission) => void): this;
+  on(event: 'mission', callback: (data: { cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>; bin: Pick<RobotState, 'bin'>; batPct: Pick<RobotState, 'batPct'>; }) => void): this;
   /** 
    * Emitted every time the Robot publish a new message to the mqtt bus. 
    * 
    * Will print the Full robot state!
    */
   on(event: 'state', callback: (data: RobotState) => void): this;
-}
-interface Update {
-  state:
-  {
-    reported:
-    {
-      soundVer: string,
-      uiSwVer: string,
-      navSwVer: string,
-      wifiSwVer: string,
-      mobilityVer: string,
-      bootloaderVer: string,
-      umiVer: string,
-      softwareVer: string;
-    };
-  };
 }
 interface Region {
   region_id: string;
@@ -314,7 +298,7 @@ interface RobotState {
   chrgLrPtrn: number,
   cleanMissionStatus: {
     cycle: 'none' | 'clean' | string,
-    phase: 'charge' | 'stuck' | 'run' | 'hmUsrDock',
+    phase: 'charge' | 'stuck' | 'run' | 'hmUsrDock' | string,
     expireM: number,
     rechrgM: number,
     error: number,
@@ -325,7 +309,7 @@ interface RobotState {
     rechrgTm: number,
     mssnStrtTm: number,
     operatingMode: number,
-    initiator: 'manual' | 'localApp' | string,
+    initiator: '' | 'manual' | 'localApp' | string,
     nMssn: number,
     missionId: string;
   },
@@ -437,7 +421,7 @@ interface RobotState {
     sLang: 'en-US_1' | Pick<Pick<Pick<RobotState, 'langs2'>, 'dlangs'>, 'langs'[number]>,
     aSlots: number;
   },
-  lastCommand: { command: 'evac' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; } | {
+  lastCommand: { command: 'none' | 'evac' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; } | {
     pmap_id: string | null;
     regions: {
       region_id: string; type: 'rid' | 'zid';

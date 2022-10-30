@@ -7,16 +7,15 @@ import { Local as LocalV3 } from './V3/local';
 
 
 
+export function Cloud(username: string, password: string, version?: number): CloudV2 | CloudV3;
 export function Cloud(username: string, password: string, version: 1): CloudV1;
 export function Cloud(username: string, password: string, version: 2): CloudV2;
 export function Cloud(username: string, password: string, version: 3): CloudV3;
-export function Cloud(username: string, password: string, version?: number): CloudV2 | CloudV3;
 
-
+export function Local(blid: string, password: string, ip: string, version?: number, interval?: number): LocalV2 | LocalV3;
 export function Local(blid: string, password: string, ip: string, version: 1): LocalV1;
 export function Local(blid: string, password: string, ip: string, version: 2, interval?: number): LocalV2;
 export function Local(blid: string, password: string, ip: string, version: 3, interval?: number): LocalV3;
-export function Local(blid: string, password: string, ip: string, version?: number, interval?: number): LocalV2 | LocalV3;
 
 /**
  * If you don't known which IP address to use in {@link Local()} you can use {@link getRobotIP()} to find it. This process takes 1-2 seconds, so if you know the IP you can just use it explicity.
