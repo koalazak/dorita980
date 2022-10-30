@@ -94,7 +94,7 @@ export class Local {
    * ```
    * The easiest way to find this information is to start a clean using the iRobot app and then call the {@link getRobotState()} method and copy the `lastCommand` values from it. Using this you can derive the `pmap_id`, `user_pmapv_id` and `regions` data. Or looking into `pmaps` property in the state.
    */
-  cleanRoom(rooms: [Room]): Promise<{ ok: null; }>;
+  cleanRoom(room: Map): Promise<{ ok: null; }>;
   /**
    * @example By adding more regions to the regions array, a set of rooms will be cleaned. At least from firmware Version 3.8.3 you can set the desired order, when cleaning multiple rooms by adding `ordered = 1`
    * ```
@@ -112,7 +112,7 @@ export class Local {
    * myRobotViaLocal.cleanRoom(args);
    * ```
    */
-  cleanRoom(rooms: OrderedRoom[]): Promise<{ ok: null; }>;
+  cleanRoom(rooms: OrderedMap): Promise<{ ok: null; }>;
   pause(): Promise<{ ok: null; }>;
   stop(): Promise<{ ok: null; }>;
   resume(): Promise<{ ok: null; }>;
@@ -197,12 +197,12 @@ interface Region {
   region_id: string;
   type: 'zid' | 'rid';
 }
-interface Room {
+interface Map {
   pmap_id: string;
-  regions: Region[];
+  regions: [Region];
   user_pmapv_id: string;
 }
-interface OrderedRoom {
+interface OrderedMap {
   ordered?: 1;
   pmap_id: string;
   regions: Region[];
