@@ -126,7 +126,7 @@ export class Local {
   resume(): Promise<{ ok: null; }>;
   /** Note: before dock you need to {@link pause()} or {@link stop()} your robot. */
   dock(): Promise<{ ok: null; }>;
-  /** Note: sends locate request. If the robot is on dock nothing will happen, otherwise it will beep. */
+  /** Note: sends locate request. The robot will beep. */
   find(): Promise<{ ok: null; }>;
   evac(): Promise<{ ok: null; }>;
   train(): Promise<{ ok: null; }>;
