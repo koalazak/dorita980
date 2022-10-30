@@ -5,15 +5,11 @@ export class Local {
    * While dorita980 is connected, you can call other methods to send commands and listen for the events to get data. Just call the {@link end()} method if you want. While dorita980 is connected, the official mobile app will only work via the cloud to send commands to your robot.
    */
   end(): void;
-  getTime(): Promise<number>;
-  getBbrun(): Promise<Bbrun>;
-  getLangs(): Promise<[{ 'en-US': 0; },
-    { 'fr-FR': 1; },
-    { 'es-ES': 2; },
-    { 'de-DE': 3; },
-    { 'it-IT': 4; }] | Record<string, number>[]>;
-  getSys(): Promise<Sys>;
-  getWirelessLastStatus(): Promise<WirelessLastStatus>;
+  getTime(): Promise<never>;
+  getBbrun(): Promise<Pick<RobotState, 'bbrun'>>;
+  getLangs(): Promise<never>;
+  getSys(): Promise<never>;
+  getWirelessLastStatus(): Promise<{ wifistat: Pick<RobotState, 'wifistat'>, wlcfg: Pick<RobotState, 'wlcfg'>; }>;
   /**
      * @example starts every day at `10:30am` except Monday:
      * ```
@@ -26,11 +22,11 @@ export class Local {
      * }
      * ```
      */
-  getWeek(): Promise<{
+  getWeek(): Promise</*{
     cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
     h: [number, number, number, number, number, number, number],
     m: [number, number, number, number, number, number, number];
-  }>;
+  }*/never>;
   /**
    * Get the full robot state but wait for the `['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose']` fields before returning.
    *
@@ -40,7 +36,7 @@ export class Local {
    *
    * Use {@link getRobotState() getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'signal'])} without `pose` in models without navigation like E6 models.
    */
-  getPreferences(): Promise<RobotState>;
+  getPreferences(): Promise</*Pick<RobotState, 'cleanMissionStatus' | 'cleanSchedule' | 'name' | 'vacHigh' | 'pose'>*/ never>;
   /**
 * Partially overwrites the robot state to configure it.
 * 
@@ -64,19 +60,31 @@ export class Local {
    * });
    * ```
    */
-  getRobotState(waitForFields?: string[]): Promise<RobotState>;
+  getRobotState<WaitForFields extends (keyof RobotState)[]>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields[number]>>;
+  /**
+ * Get the robot state but wait for the `waitForFields` fields before return.
+ * 
+ * The state object starts empty and the robot will add data over time.
+ * 
+ * @example```
+ * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
+ *   console.log(actualState);
+ * });
+ * ```
+ */
+  getRobotState(): Promise<{}>;
   /**
    * With this you can draw a map :) in models with position reporting. Use {@link getBasicMission()} in robots without position reporting feature like E5 models.
    */
-  getMission(): Promise<Mission>;
+  getMission(): Promise<{ cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>; bin: Pick<RobotState, 'bin'>; batPct: Pick<RobotState, 'batPct'>; }>;
   /**
    * Same as {@link getMission()} but don't wait for `pose` information
    */
-  getBasicMission(): Promise<BasicMission>;
-  getWirelessConfig(): Promise<any>;
-  getWirelessStatus(): Promise<WirelessStatus>;
-  getCloudConfig(): Promise<'prod' | string>;
-  getSKU(): Promise<any>;
+  getBasicMission(): Promise<{ cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>; bin: Pick<RobotState, 'bin'>; batPct: Pick<RobotState, 'batPct'>; }>;
+  getWirelessConfig(): Promise<{ wlcfg: Pick<RobotState, 'wlcfg'>; netinfo: Pick<RobotState, 'netinfo'>; }>;
+  getWirelessStatus(): Promise<{ wifistat: Pick<RobotState, 'wifistat'>, netinfo: Pick<RobotState, 'netinfo'>; }>;
+  getCloudConfig(): Promise<Pick<RobotState, 'cloudEnv'>>;
+  getSKU(): Promise<string>;
   start(): Promise<{ ok: null; }>;
   clean(): Promise<{ ok: null; }>;
   /**
@@ -120,8 +128,8 @@ export class Local {
   dock(): Promise<{ ok: null; }>;
   /** Note: sends locate request. If the robot is on dock nothing will happen, otherwise it will beep. */
   find(): Promise<{ ok: null; }>;
-  evac(): Promise<any>;
-  train(): Promise<any>;
+  evac(): Promise<{ ok: null; }>;
+  train(): Promise<{ ok: null; }>;
   /**
      * @example Disable Sunday and start every day at `10:30am`:
      * ```
@@ -208,205 +216,333 @@ interface OrderedMap {
   regions: Region[];
   user_pmapv_id: string;
 }
-interface WirelessLastStatus {
-  wifistat: { wifi: number, uap: boolean, cloud: number; },
-  wlcfg: { sec: number, ssid: string; },
-}
-interface Sys {
-  bbrstinfo: { nNavRst: number, nMobRst: number, causes: '0000'; },
-  cap: { pose: number, ota: number, multiPass: number, carpetBoost: number; },
-  sku: string,
-  batteryType: 'lith' | string,
-  soundVer: string,
-  uiSwVer: string,
-  navSwVer: string,
-  wifiSwVer: string,
-  mobilityVer: string,
-  bootloaderVer: string,
-  umiVer: string,
-  softwareVer: string,
-  audio: { active: boolean; },
-  bin: { present: boolean, full: boolean; };
-}
-interface Bbrun {
-  hr: number,
-  min: number,
-  sqft: number,
-  nStuck: number,
-  nScrubs: number,
-  nPicks: number,
-  nPanics: number,
-  nCliffsF: number,
-  nCliffsR: number,
-  nMBStll: number,
-  nWStll: number,
-  nCBump: number;
-}
-interface WirelessStatus {
-  wifistat: { wifi: number, uap: boolean, cloud: number; },
-  netinfo:
-  {
-    dhcp: boolean,
-    addr: number,
-    mask: number,
-    gw: number,
-    dns1: number,
-    dns2: number,
-    bssid: string,
-    sec: number;
-  },
-}
-interface BasicMission {
-  cleanMissionStatus:
-  {
-    cycle: 'none' | string,
-    phase: 'charge' | string,
-    expireM: number,
-    rechrgM: number,
-    error: number,
-    notReady: number,
-    mssnM: number,
-    sqft: number,
-    initiator: 'manual' | 'localApp' | string,
-    nMssn: number;
-  },
-}
-interface Mission {
-  cleanMissionStatus:
-  {
-    cycle: 'none' | string,
-    phase: 'charge' | string,
-    expireM: number,
-    rechrgM: number,
-    error: number,
-    notReady: number,
-    mssnM: number,
-    sqft: number,
-    initiator: 'manual' | 'localApp' | string,
-    nMssn: number;
-  },
-  pose: { theta: number, point: { x: number, y: number; }; },
-}
-
-interface RobotState extends Record<string, any> {
-  netinfo:
-  {
-    dhcp: boolean,
-    addr: number,
-    mask: number,
-    gw: number,
-    dns1: number,
-    dns2: number,
-    bssid: string,
-    sec: number;
-  },
-  wifistat: { wifi: number, uap: boolean, cloud: number; },
-  wlcfg: { sec: number, ssid: string; },
-  mac: string,
-  country: 'US' | string,
-  cloudEnv: 'prod' | string,
-  svcEndpoints: { svcDeplId: string; },
-  localtimeoffset: number,
-  utctime: number,
-  pose: { theta: number, point: { x: number, y: number; }; },
+interface RobotState {
+  audio: { volume: number; },
   batPct: number,
-  dock: { known: boolean; },
+  batteryType: 'F12433011' | string,
+  batInfo: {
+    mDate: string,
+    mName: 'PanasonicEnergy' | string,
+    mDaySerial: number,
+    mData: string,
+    mLife: string,
+    cCount: number,
+    afCount: number;
+  },
+  batAuthEnable: null | any,
+  bbchg: {
+    nChatters: number,
+    nKnockoffs: number,
+    nLithF: number,
+    nChgOk: number,
+    aborts: number[],
+    chgErr: number[],
+    smberr: number,
+    nChgErr: number;
+  },
+  bbchg3: { estCap: number, nAvail: number, hOnDock: number, avgMin: number; },
+  bbmssn: {
+    aCycleM: number,
+    nMssnF: number,
+    nMssnC: number,
+    nMssnOk: number,
+    aMssnM: number,
+    nMssn: number;
+  },
+  bbnav: { aMtrack: number, nGoodLmrks: number, aGain: number, aExpo: number; },
+  bbpause: {
+    pauses: number[];
+  },
+  bbrstinfo: {
+    nNavRst: number,
+    nMapLoadRst: number,
+    nMobRst: number,
+    nSafRst: number,
+    safCauses: number[];
+  },
+  bbrun: {
+    nCBump: number,
+    nMBStll: number,
+    nPanics: number,
+    nOvertemps: number,
+    nPicks: number,
+    nOpticalDD: number,
+    nPiezoDD: number,
+    nWStll: number,
+    nScrubs: number,
+    nEvacs: number,
+    nStuck: number,
+    nCliffsF: number,
+    nCliffsR: number;
+  },
+  bbswitch: { nBumper: number, nDrops: number, nDock: number, nSpot: number, nClean: number; },
+  bbsys: { min: number, hr: number; },
+  behaviorFwk: null | any,
   bin: { present: boolean, full: boolean; },
-  audio: { active: boolean; },
-  cleanMissionStatus:
-  {
-    cycle: 'none' | string,
-    phase: 'charge' | string,
+  binPause: boolean,
+  bleDevLoc: boolean,
+  cap: {
+    binFullDetect: number,
+    oMode: number,
+    dockComm: number,
+    wDevLoc: number,
+    bleDevLoc: number,
+    edge: number,
+    maps: number,
+    pmaps: number,
+    mc: number,
+    tLine: number,
+    area: number,
+    eco: number,
+    multiPass: number,
+    team: number,
+    pp: number,
+    pose: number,
+    lang: number,
+    '5ghz': number,
+    prov: number,
+    sched: number,
+    svcConf: number,
+    ota: number,
+    log: number,
+    langOta: number,
+    ns: number,
+    tileScan: number;
+  } | Record<string, number>;
+  carpetBoost: boolean,
+  childLock: boolean,
+  chrgLrPtrn: number,
+  cleanMissionStatus: {
+    cycle: 'none' | 'clean' | string,
+    phase: 'charge' | 'stuck' | 'run' | 'hmUsrDock',
     expireM: number,
     rechrgM: number,
     error: number,
     notReady: number,
+    condNotReady: any[],
     mssnM: number,
-    sqft: number,
+    expireTm: number,
+    rechrgTm: number,
+    mssnStrtTm: number,
+    operatingMode: number,
     initiator: 'manual' | 'localApp' | string,
-    nMssn: number;
-  },
-  language: number,
-  noAutoPasses: boolean,
-  noPP: boolean,
-  ecoCharge: boolean,
-  vacHigh: boolean,
-  binPause: boolean,
-  carpetBoost: boolean,
-  openOnly: boolean,
-  twoPass: boolean,
-  schedHold: boolean,
-  lastCommand: { command: 'dock' | string, time: number, initiator: 'manual' | string; },
-  langs:
-  [{ 'en-US': 0; },
-    { 'fr-FR': 1; },
-    { 'es-ES': 2; },
-    { 'de-DE': 3; },
-    { 'it-IT': 4; }] | Record<string, number>[];
-  bbnav: { aMtrack: number, nGoodLmrks: number, aGain: number, aExpo: number; },
-  bbpanic: { panics: number[]; },
-  bbpause: { pauses: number[]; },
-  bbmssn:
-  {
     nMssn: number,
-    nMssnOk: number,
-    nMssnC: number,
-    nMssnF: number,
-    aMssnM: number,
-    aCycleM: number;
+    missionId: string;
   },
-  bbrstinfo: { nNavRst: number, nMobRst: number, causes: string; },
-  cap: { pose: number, ota: number, multiPass: number, carpetBoost: number; },
-  sku: string,
-  batteryType: 'lith' | string,
-  soundVer: string,
-  uiSwVer: string,
-  navSwVer: string,
-  wifiSwVer: string,
-  mobilityVer: string,
-  bootloaderVer: string,
-  umiVer: string,
-  softwareVer: string,
-  tz:
-  {
-    events: { dt: number, off: number; }[],
-    ver: 2;
+  cleanSchedule2: [
+    {
+      enabled: boolean,
+      type: number,
+      start: {
+        day: number[],
+        hour: number,
+        min: number;
+      },
+      cmdStr: '{\'command\': \'start\'}' | string;
+    }
+  ],
+  cloudEnv: 'prod' | string,
+  connected: boolean,
+  country: 'US' | string,
+  deploymentState: number,
+  dock: {
+    known: boolean,
+    pn: 'unknown' | string,
+    state: 301 | number,
+    id: string,
+    fwVer: '4.8.3' | string,
+    hwRev: number,
+    varID: number;
   },
-  timezone: 'America/Buenos_Aires' | string,
+  evacAllowed: boolean,
+  ecoCharge: boolean,
+  featureFlags: {
+    pmapSharing: number,
+    reachableSpaceFlags: number,
+    wallE: number,
+    stratParams: number,
+    childLockEnable: number,
+    covHybridPlan: number,
+    trainingStrategy: number,
+    covPlan: number,
+    chrgLrPtrnEnable: number,
+    clearHaz: boolean;
+  },
+  hwPartsRev: {
+    mobBrd: number,
+    mobBlid: string,
+    imuPartNo: string,
+    lrDrv: string,
+    navSerialNo: string,
+    wlan0HwAddr: string,
+    NavBrd: number;
+  },
+  hwDbgr: null | any,
+  langs2: {
+    sVer: '1.0' | string,
+    dLangs: {
+      ver: '0.35' | string, langs: ['ar-SA_1',
+        'ar-SA_2',
+        'cs-CZ_1',
+        'cs-CZ_2',
+        'da-DK_1',
+        'da-DK_2',
+        'de-DE_1',
+        'de-DE_2',
+        'en-GB_1',
+        'en-GB_2',
+        'en-US_1',
+        'en-US_2',
+        'es-ES_1',
+        'es-ES_2',
+        'es-XL_1',
+        'es-XL_2',
+        'fi-FI_1',
+        'fi-FI_2',
+        'fr-CA_1',
+        'fr-CA_2',
+        'fr-FR_1',
+        'fr-FR_2',
+        'he-IL_1',
+        'he-IL_2',
+        'it-IT_1',
+        'it-IT_2',
+        'ja-JP_1',
+        'ja-JP_2',
+        'ko-KR_1',
+        'ko-KR_2',
+        'nb-NO_1',
+        'nb-NO_2',
+        'nl-NL_1',
+        'nl-NL_2',
+        'pl-PL_1',
+        'pl-PL_2',
+        'pt-BR_1',
+        'pt-BR_2',
+        'pt-PT_1',
+        'pt-PT_2',
+        'ru-RU_1',
+        'ru-RU_2',
+        'sv-SE_1',
+        'sv-SE_2',
+        'tr-TR_1',
+        'tr-TR_2',
+        'zh-CN_1',
+        'zh-CN_2',
+        'zh-HK_1',
+        'zh-HK_2',
+        'zh-TW_1',
+        'zh-TW_2'] | string[];
+    },
+    sLang: 'en-US_1' | Pick<Pick<Pick<RobotState, 'langs2'>, 'dlangs'>, 'langs'[number]>,
+    aSlots: number;
+  },
+  lastCommand: { command: 'evac' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; } | {
+    pmap_id: string | null;
+    regions: {
+      region_id: string; type: 'rid' | 'zid';
+    }[] | null;
+    user_pmapv_id: string | null;
+  } | null | Record<string, any>,
+  lastDisconnect: number,
+  mapUploadAllowed: boolean,
+  missionTelemetry: {
+    aux_comms: number,
+    bat_stats: number,
+    behaviors_report: number,
+    camera_settings: number,
+    coverage_report: number,
+    map_hypotheses: number,
+    map_load: number,
+    map_save: number,
+    pmap_navigability: number,
+    roomseg_report: number,
+    sensor_stats: number,
+    tumor_classifier_report: number,
+    visual_stasis_report: number,
+    vital_stats: number,
+    vslam_report: number;
+  } | Record<string, number>,
+  mssnNavStats: {
+    nMssn: number,
+    missionId: string,
+    gLmk: number,
+    lmk: number,
+    reLc: number,
+    plnErr: 'none' | string,
+    mTrk: number,
+    kdp: number,
+    sfkdp: number,
+    nmc: number,
+    nmmc: number,
+    nrmc: number,
+    mpSt: 'idle' | string,
+    l_drift: number,
+    h_drift: number,
+    l_squal: number,
+    h_squal: number;
+  } | Record<string, number | string>,
   name: string,
-  cleanSchedule:
-  {
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-    h: [number, number, number, number, number, number, number],
-    m: [number, number, number, number, number, number, number];
-  },
-  bbchg3:
-  {
-    avgMin: number,
-    hOnDock: number,
-    nAvail: number,
-    estCap: number,
-    nLithChrg: number,
-    nNimhChrg: number,
-    nDocks: number;
-  },
-  bbchg: { nChgOk: number, nLithF: number, aborts: number[]; },
-  bbswitch: { nBumper: number, nClean: number, nSpot: number, nDock: number, nDrops: number; },
-  bbrun:
-  {
-    hr: number,
-    min: number,
-    sqft: number,
-    nStuck: number,
-    nScrubs: number,
-    nPicks: number,
-    nPanics: number,
-    nCliffsF: number,
-    nCliffsR: number,
-    nMBStll: number,
-    nWStll: number,
-    nCBump: number;
-  },
-  bbsys: { hr: number, min: number; },
-  signal: { rssi: number, snr: number; };
+  noAutoPasses: boolean,
+  openOnly: boolean,
+  optFeats: { pmaps: null | any; } | Record<string, any>,
+  pmapLearningAllowed: boolean,
+  pmaps: Record<string, string>[],
+  pmapCL: boolean,
+  pmapSGen: number,
+  pmapShare: { copy: number[], share: null | any; } | Record<string, any>,
+  rankOverlap: number,
+  reflexSettings: { rlWheelDrop: { enabled: number; } | Record<string, number>; } | Record<string, any>;
+  runtimeStats: { min: number, sqft: number, hr: number; },
+  sceneRecog: null | any,
+  schedHold: boolean,
+  secureBoot: {
+    log: number,
+    flip: number,
+    sbl1Ver: 'B3.2.02_PPUB' | string,
+    stublVer: 'B3.2.03_PPUB' | string,
+    efuse: number,
+    blType: number,
+    enforce: number,
+    lastRst: string,
+    recov: 'linux+4.15.0+Firmware-Build+1339' | string,
+    idSwitch: number,
+    permReq: number,
+    perm: 'none' | string;
+  } | Record<string, number | string>,
+  sku: 'i855020' | string,
+  softwareVer: 'lewis+22.29.3+2022-08-23-eb90240ea48+Firmware-Build+1832' | string,
+  subModSwVer: {
+    nav: 'lewis-nav+22.29.3+ubuntu-HEAD-eb90240ea48+1832' | string,
+    mob: '22.29.3+ubuntu-HEAD-eb90240ea48+1832' | string,
+    pwr: '0.6.0+ubuntu-HEAD-eb90240ea48+1832' | string,
+    sft: '1.4.0+ubuntu-HEAD-9a9a5d0c891+36' | string,
+    mobBtl: '4.2' | string,
+    linux: 'linux+4.20.0+Firmware-Build+1832' | string,
+    con: '3.14.4-tags/release-3.14.4@050d359d/ubuntu' | string;
+  } | Record<string, string>,
+  svcEndpoints: { svcDeplId: 'v011' | string; } | Record<string, string>,
+  timezone: 'America/Los_Angeles' | string,
+  tls: {
+    tzbChk: number,
+    privKType: number,
+    lcCiphers: number[];
+  } | Record<string, number | number[]>,
+  twoPass: boolean,
+  tz: { events: { dt: number, off: number; }[], ver: 16 | number; },
+  vacHigh: boolean,
+  wDevLoc: boolean,
+  netinfo: {
+    dhcp: boolean,
+    addr: string,
+    mask: '255.255.255.0' | string,
+    gw: string,
+    dns1: string,
+    dns2: string,
+    bssid: string,
+    sec: number;
+  } | Record<string, boolean | string | number>,
+  signal: { rssi: number, snr: number, noise: number; },
+  wifistat: { cloud: number, wifi: number, uap: boolean; },
+  wlcfg: { sec: number, ssid: string; };
 }
