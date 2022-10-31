@@ -418,7 +418,7 @@ interface RobotState {
         'zh-TW_1',
         'zh-TW_2'] | string[];
     },
-    sLang: 'en-US_1' | Pick<Pick<Pick<RobotState, 'langs2'>, 'dlangs'>, 'langs'[number]>,
+    sLang: 'en-US_1' | string[];/*Pick<Pick<Pick<RobotState, 'langs2'>, 'dlangs'>, 'langs'[number]>*/
     aSlots: number;
   },
   lastCommand: { command: 'none' | 'evac' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; } | {
