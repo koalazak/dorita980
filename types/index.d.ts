@@ -53,20 +53,9 @@ export function getRobotIP(callback: (err, ip: string) => void): void;
  * });
  * ```
  */
-export function discovery(callback: (err, data: DiscoveryData) => void): void;
+export function discovery(callback: (err, data: Omit<PublicInfo, 'blid'>) => void): void;
 export function getRobotPublicInfo(callback: (err, data: PublicInfo) => void): void;
 
-interface DiscoveryData {
-  ver: '2' | string,
-  hostname: string,
-  robotname: string,
-  ip: string,
-  mac: string,
-  sw: string,
-  sku: string,
-  nc: number,
-  proto: 'mqtt' | string;
-}
 interface PublicInfo {
   ver: '2' | string,
   hostname: string,
