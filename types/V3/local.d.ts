@@ -1,3 +1,7 @@
+import { cycle, phase } from '../global';
+
+
+
 export class Local {
   /**
    * Close the connection to the robot. It's important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
@@ -297,8 +301,8 @@ interface RobotState {
   childLock: boolean,
   chrgLrPtrn: number,
   cleanMissionStatus: {
-    cycle: 'none' | 'clean' | string,
-    phase: 'charge' | 'stuck' | 'run' | 'hmUsrDock' | string,
+    cycle: cycle,
+    phase: phase,
     expireM: number,
     rechrgM: number,
     error: number,
