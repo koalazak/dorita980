@@ -1,3 +1,7 @@
+import { cycle, phase, schedule } from '../global';
+
+
+
 export class Local {
   /**
    * (this is not a promise)
@@ -13,6 +17,44 @@ export class Local {
    *   alwaysFinish: true 
    * }
    * ```
+   * | Carpet Boost \|| Cleaning Passes \|| Finish Cleaning when bin is full \|| Edge Clean \|| Flags DEC  | 
+   * |:---------------|:-----------------:|:----------------------------------:|:------------:|-----------:| 
+   * | auto           | auto              | on                                 | on           | 0          | 
+   * | auto           | auto              | on                                 | off          | 2          | 
+   * | auto           | auto              | off                                | on           | 32         | 
+   * | auto           | auto              | off                                | off          | 24         | 
+   * | auto           | one               | on                                 | on           | 1024       | 
+   * | auto           | one               | on                                 | off          | 1026       | 
+   * | auto           | one               | off                                | on           | 1056       | 
+   * | auto           | one               | off                                | off          | 1058       | 
+   * | auto           | two               | on                                 | on           | 1025       | 
+   * | auto           | two               | on                                 | off          | 1027       | 
+   * | auto           | two               | off                                | on           | 1057       | 
+   * | auto           | two               | off                                | off          | 1059       | 
+   * | Performance    | auto              | on                                 | on           | 80         | 
+   * | Performance    | auto              | on                                 | off          | 82         | 
+   * | Performance    | auto              | off                                | on           | 112        | 
+   * | Performance    | auto              | off                                | off          | 114        | 
+   * | Performance    | one               | on                                 | on           | 1104       | 
+   * | Performance    | one               | on                                 | off          | 1106       | 
+   * | Performance    | one               | off                                | on           | 1136       | 
+   * | Performance    | one               | off                                | off          | 1138       | 
+   * | Performance    | two               | on                                 | on           | 1105       | 
+   * | Performance    | two               | on                                 | off          | 1107       | 
+   * | Performance    | two               | off                                | on           | 1137       | 
+   * | Performance    | two               | off                                | off          | 1139       | 
+   * | Eco            | auto              | on                                 | on           | 16         | 
+   * | Eco            | auto              | on                                 | off          | 18         | 
+   * | Eco            | auto              | off                                | on           | 48         | 
+   * | Eco            | auto              | off                                | off          | 50         | 
+   * | Eco            | one               | on                                 | on           | 1040       | 
+   * | Eco            | one               | on                                 | off          | 1042       | 
+   * | Eco            | one               | off                                | on           | 1072       | 
+   * | Eco            | one               | off                                | off          | 1074       | 
+   * | Eco            | two               | on                                 | on           | 1041       | 
+   * | Eco            | two               | on                                 | off          | 1043       | 
+   * | Eco            | two               | off                                | on           | 1073       | 
+   * | Eco            | two               | off                                | off          | 1075       | 
    */
   decodeCleaningPreferences(flag: number): {
     carpetBoost: 'auto' | 'performance' | 'eco',
@@ -55,12 +97,7 @@ export class Local {
    * ```
    */
   getWeek(): Promise<{
-    ok:
-    {
-      cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-      h: [number, number, number, number, number, number, number],
-      m: [number, number, number, number, number, number, number];
-    },
+    ok: schedule,
     id: 2;
   }>;
   /** 
@@ -91,8 +128,8 @@ export class Local {
     ok:
     {
       flags: number,
-      cycle: 'none' | string,
-      phase: 'charge' | string,
+      cycle: cycle,
+      phase: phase,
       pos: { theta: number, point: { x: number, y: number; }; },
       batPct: number,
       expireM: number,
@@ -137,7 +174,7 @@ export class Local {
   dock(): Promise<{ ok: null, id: 293; }>;
   /**
    * @example Disable Sunday and start every day at `10:30am`:
-   * ```
+   * ```javascript
    * var newWeek = {
    *   cycle:['none','start','start','start','start','start','start'],
    *   h:[10,10,10,10,10,10,10],
@@ -146,11 +183,7 @@ export class Local {
    * myRobotViaLocal.setWeek(newWeek)
    * ```
    */
-  setWeek(week: {
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-    h: [number, number, number, number, number, number, number],
-    m: [number, number, number, number, number, number, number];
-  }): Promise<{ ok: null, id: 218; }>;
+  setWeek(week: schedule): Promise<{ ok: null, id: 218; }>;
   setTime(time: { d: number | string, h: number, m: number; }): Promise<{ ok: null, id: 23; }>;
   setPtime(time: { time: number; }): Promise<{ ok: null, id: 23; }>;
   setPreferences(preferences: {

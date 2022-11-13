@@ -1,3 +1,7 @@
+import { cycle, initiator, phase, schedule } from '../global';
+
+
+
 export class Local {
   /**
    * Close the connection to the robot. It's important if you want to send commands via the official mobile app via Local network. There's a maximum of 1 connection at any time in local network, so if your app is connected, the official mobile app only works via cloud access.
@@ -7,11 +11,7 @@ export class Local {
   end(): void;
   getTime(): Promise<number>;
   getBbrun(): Promise<Pick<RobotState, 'bbrun'>>;
-  getLangs(): Promise<[{ 'en-US': 0; },
-    { 'fr-FR': 1; },
-    { 'es-ES': 2; },
-    { 'de-DE': 3; },
-    { 'it-IT': 4; }] | Record<string, number>[]>;
+  getLangs(): Promise<Pick<RobotState, 'langs'>>;
   getSys(): Promise<{
     bbrstinfo: Pick<RobotState, 'bbrstinfo'>,
     cap: Pick<RobotState, 'cap'>;
@@ -36,12 +36,9 @@ export class Local {
   /**
      * @example starts every day at `10:30am` except Monday:
      * ```
-     * { ok:
-     *   { cycle: [ 'start', 'none', 'start', 'start', 'start', 'start', 'start' ],
-     *      h: [ 10, 10, 10, 10, 10, 10, 10 ],
-     *      m: [ 30, 30, 30, 30, 30, 30, 30 ] 
-     *   },
-     *   id: 2 
+     * { cycle: [ 'start', 'none', 'start', 'start', 'start', 'start', 'start' ],
+     *    h: [ 10, 10, 10, 10, 10, 10, 10 ],
+     *    m: [ 30, 30, 30, 30, 30, 30, 30 ] 
      * }
      * ```
      */
@@ -65,7 +62,7 @@ export class Local {
   /**
  * Partially overwrites the robot state to configure it.
  * 
- * @example```
+ * @example```javascript
  * var newPreferences = { 
  *   binPause: false
  * };
@@ -86,7 +83,7 @@ export class Local {
    * 
    * The state object starts empty and the robot will add data over time.
    * 
-   * @example```
+   * @example```javascript
    * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
    *   console.log(actualState);
    * });
@@ -98,7 +95,20 @@ export class Local {
  * 
  * The state object starts empty and the robot will add data over time.
  * 
- * @example```
+ * @example```javascript
+ * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
+ *   console.log(actualState);
+ * });
+ * ```
+ */
+  getRobotState<WaitForFields extends (keyof RobotState)>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields>>;
+
+  /**
+ * Get the robot state but wait for the `waitForFields` fields before return.
+ * 
+ * The state object starts empty and the robot will add data over time.
+ * 
+ * @example```javascript
  * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
  *   console.log(actualState);
  * });
@@ -111,7 +121,7 @@ export class Local {
   getMission(): Promise<{
     cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
     bin: Pick<RobotState, 'bin'>;
-    batPct: Pick<RobotState>;
+    batPct: Pick<RobotState, 'batPct'>;
     pose?: Pick<RobotState, 'pose'>;
   }>;
   /**
@@ -120,7 +130,7 @@ export class Local {
   getBasicMission(): Promise<{
     cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
     bin: Pick<RobotState, 'bin'>;
-    batPct: Pick<RobotState>;
+    batPct: Pick<RobotState, 'batPct'>;
   }>;
   getWirelessConfig(): Promise<{
     wlcfg: Pick<RobotState, 'wlcfg'>;
@@ -143,7 +153,7 @@ export class Local {
   find(): Promise<{ ok: null; }>;
   /**
      * @example Disable Sunday and start every day at `10:30am`:
-     * ```
+     * ```javascript
      * var newWeek = {
      *   cycle:['none','start','start','start','start','start','start'],
      *   h:[10,10,10,10,10,10,10],
@@ -177,13 +187,13 @@ export class Local {
    * Just to experiment with raw commands using the MQTT client. Known topics are `cmd` and `delta`. But Experiment with other topics and message formats!
    *
    * The `delta` commands typically have the following json format:
-   * ```{state: newState}```
+   * `{state: newState}`
    * 
    * The `cmd` commands typically have the following json format:
-   * ```{command: command, time: Date.now() / 1000 | 0, initiator: 'localApp'};```
+   * `{command: command, time: Date.now() / 1000 | 0, initiator: 'localApp'};`
    * 
    * @example For example to send a clean command:
-   * ```
+   * ```javascript
    * let myCommand = {command: 'clean', time: Date.now() / 1000 | 0, initiator: 'localApp'};
    *
    * myRobotViaLocal.publish('cmd', JSON.stringify(myCommand), function(e) {
@@ -211,7 +221,7 @@ export class Local {
   on(event: 'mission', callback: (data: {
     cleanMissionStatus: Pick<RobotState, 'cleanMissionStatus'>;
     bin: Pick<RobotState, 'bin'>;
-    batPct: Pick<RobotState>;
+    batPct: Pick<RobotState, 'batPct'>;
     pose?: Pick<RobotState, 'pose'>;
   }) => void): this;
   /** 
@@ -241,21 +251,21 @@ interface RobotState {
   mapUploadAllowed: boolean,
   localtimeoffset: number,
   utctime: number,
-  pose: { theta: number, point: { x: number, y: number; }; } | Record<string, any>,
+  pose: { theta: number, point: { x: number, y: number; }; },
   batPct: number,
   dock: { known: boolean; },
   bin: { present: boolean, full: boolean; },
   audio: { active: boolean; },
   cleanMissionStatus: {
-    cycle: 'none' | 'clean' | string,
-    phase: 'charge' | 'stuck' | 'run' | 'hmUsrDock' | string,
+    cycle: cycle;
+    phase: phase,
     expireM: number,
     rechrgM: number,
     error: number,
     notReady: number,
     mssnM: number,
     sqft: number,
-    initiator: '' | 'manual' | 'localApp' | string,
+    initiator: initiator,
     nMssn: number;
   },
   language: number,
@@ -268,7 +278,7 @@ interface RobotState {
   openOnly: boolean,
   twoPass: boolean,
   schedHold: boolean,
-  lastCommand: { command: 'none' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; },
+  lastCommand: { command: 'none' | string, time: number, initiator: initiator; } | null | Record<string, any>,
   langs: [
     { 'en-US': 0; },
     { 'fr-FR': 1; },
@@ -317,11 +327,7 @@ interface RobotState {
   tz: { events: { dt: number, off: number; }[], ver: 16 | number; },
   timezone: 'America/Los_Angeles' | string,
   name: string,
-  cleanSchedule: {
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-    h: [number, number, number, number, number, number, number],
-    m: [number, number, number, number, number, number, number];
-  },
+  cleanSchedule: schedule,
   bbchg3: {
     avgMin: number,
     hOnDock: number,

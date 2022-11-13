@@ -3,7 +3,7 @@ export type cycle = 'none' | 'clean' | 'spot';
  * Known phase strings and their meanings:
  * 
  * | phase | Meaning |
- * | - | - |
+ * |:-|:-:|
  * | charge | Charging |
  * | new | New Mission* |
  * | run | Running |
@@ -22,14 +22,14 @@ export type cycle = 'none' | 'clean' | 'spot';
  * 
  * Phases, marked with asterisk (*), have not been seen being reported by Roomba 930. All the definitions are taken from Roomba980-Python.
  * 
- * @see {@link https://www.openhab.org/addons/bindings/irobot/}
+ * @see [openhab.org/addons/bindings/irobot/](https://www.openhab.org/addons/bindings/irobot/)
  */
 export type phase = 'charge' | 'new' | 'run' | 'resume' | 'hmMidMsn' | 'recharge' | 'stuck' | 'hmUsrDock' | 'dock' | 'dockend' | 'cancelled' | 'stop' | 'pause' | 'hmPostMsn' | '';
 /**
  * Error codes. Data type is string in order to be able to utilize mapping to human-readable strings.
  * 
  * |Code|Meaning|
- * |:----|:----|
+ * |:--|:--:|
  * |0|None|
  * |1|Left wheel off floor|
  * |2|Main Brushes stuck|
@@ -88,4 +88,62 @@ export type phase = 'charge' | 'new' | 'run' | 'resume' | 'hmMidMsn' | 'recharge
  * |76|Hardware problem detected|
  */
 export type error = number;
-export type initiator = '' | 'manual' | 'localApp' | string; 
+export type initiator = '' | 'manual' | 'localApp' | string;
+export type langs = ['ar-SA_1',
+  'ar-SA_2',
+  'cs-CZ_1',
+  'cs-CZ_2',
+  'da-DK_1',
+  'da-DK_2',
+  'de-DE_1',
+  'de-DE_2',
+  'en-GB_1',
+  'en-GB_2',
+  'en-US_1',
+  'en-US_2',
+  'es-ES_1',
+  'es-ES_2',
+  'es-XL_1',
+  'es-XL_2',
+  'fi-FI_1',
+  'fi-FI_2',
+  'fr-CA_1',
+  'fr-CA_2',
+  'fr-FR_1',
+  'fr-FR_2',
+  'he-IL_1',
+  'he-IL_2',
+  'it-IT_1',
+  'it-IT_2',
+  'ja-JP_1',
+  'ja-JP_2',
+  'ko-KR_1',
+  'ko-KR_2',
+  'nb-NO_1',
+  'nb-NO_2',
+  'nl-NL_1',
+  'nl-NL_2',
+  'pl-PL_1',
+  'pl-PL_2',
+  'pt-BR_1',
+  'pt-BR_2',
+  'pt-PT_1',
+  'pt-PT_2',
+  'ru-RU_1',
+  'ru-RU_2',
+  'sv-SE_1',
+  'sv-SE_2',
+  'tr-TR_1',
+  'tr-TR_2',
+  'zh-CN_1',
+  'zh-CN_2',
+  'zh-HK_1',
+  'zh-HK_2',
+  'zh-TW_1',
+  'zh-TW_2'];
+
+export type schedule = {
+  cycle: ['start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none'],
+  h: [number, number, number, number, number, number, number],
+  m: [number, number, number, number, number, number, number];
+};

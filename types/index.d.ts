@@ -22,7 +22,7 @@ export function Local(blid: string, password: string, ip: string, version: 3, in
  *
  * You need UDP broadcast enabled in your network!
  * 
- * @example ```
+ * @example ```javascript
  * var dorita980 = require('dorita980');
  *
  * dorita980.getRobotIP((ierr, ip) => {
@@ -45,7 +45,7 @@ export function getRobotIP(callback: (err, ip: string) => void): void;
  * 
  * You need UDP broadcast enabled in your network!
  * 
- * @example ```
+ * @example ```javascript
  * var dorita980 = require('dorita980');
  *
  * dorita980.discovery((ierr, data) => {

@@ -1,4 +1,4 @@
-import { cycle, phase } from '../global';
+import { cycle, initiator, langs, phase } from '../global';
 
 
 
@@ -17,13 +17,10 @@ export class Local {
   /**
      * @example starts every day at `10:30am` except Monday:
      * ```
-     * { ok:
-     *   { cycle: [ 'start', 'none', 'start', 'start', 'start', 'start', 'start' ],
-     *      h: [ 10, 10, 10, 10, 10, 10, 10 ],
-     *      m: [ 30, 30, 30, 30, 30, 30, 30 ] 
-     *   },
-     *   id: 2 
-     * }
+     * { cycle: [ 'start', 'none', 'start', 'start', 'start', 'start', 'start' ],
+     *    h: [ 10, 10, 10, 10, 10, 10, 10 ],
+     *    m: [ 30, 30, 30, 30, 30, 30, 30 ] 
+     * },
      * ```
      */
   getWeek(): Promise</*{
@@ -44,7 +41,7 @@ export class Local {
   /**
 * Partially overwrites the robot state to configure it.
 * 
-* @example```
+* @example```javascript
 * var newPreferences = { 
 *   binPause: false
 * };
@@ -58,7 +55,7 @@ export class Local {
    * 
    * The state object starts empty and the robot will add data over time.
    * 
-   * @example```
+   * @example```javascript
    * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
    *   console.log(actualState);
    * });
@@ -70,7 +67,20 @@ export class Local {
  * 
  * The state object starts empty and the robot will add data over time.
  * 
- * @example```
+ * @example```javascript
+ * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
+ *   console.log(actualState);
+ * });
+ * ```
+ */
+  getRobotState<WaitForFields extends (keyof RobotState)>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields>>;
+
+  /**
+ * Get the robot state but wait for the `waitForFields` fields before return.
+ * 
+ * The state object starts empty and the robot will add data over time.
+ * 
+ * @example```javascript
  * myRobotViaLocal.getRobotState(['batPct', 'bbchg3']).then((actualState) => {
  *   console.log(actualState);
  * });
@@ -93,7 +103,7 @@ export class Local {
   clean(): Promise<{ ok: null; }>;
   /**
    * @example {@link cleanRoom()} is an alias for {@link start()} - but with arguments. To clean a room - you need a structure similar to:
-   * ```
+   * ```javascript
    * const args = {
    *   pmap_id: 'ABCDEFG123456FGKS789',
    *   regions: [
@@ -109,7 +119,7 @@ export class Local {
   cleanRoom(room: Map): Promise<{ ok: null; }>;
   /**
    * @example By adding more regions to the regions array, a set of rooms will be cleaned. At least from firmware Version 3.8.3 you can set the desired order, when cleaning multiple rooms by adding `ordered = 1`
-   * ```
+   * ```javascript
    * const args = {
    *   ordered: 1,
    *   pmap_id: 'ABCDEFG123456FGKS789',
@@ -136,7 +146,7 @@ export class Local {
   train(): Promise<{ ok: null; }>;
   /**
      * @example Disable Sunday and start every day at `10:30am`:
-     * ```
+     * ```javascript
      * var newWeek = {
      *   cycle:['none','start','start','start','start','start','start'],
      *   h:[10,10,10,10,10,10,10],
@@ -146,7 +156,7 @@ export class Local {
      * ```
      */
   setWeek(week: {
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
+    cycle: ['start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none'],
     h: [number, number, number, number, number, number, number],
     m: [number, number, number, number, number, number, number];
   }): Promise<{ ok: null; }>;
@@ -154,13 +164,13 @@ export class Local {
    * Just to experiment with raw commands using the MQTT client. Known topics are `cmd` and `delta`. But Experiment with other topics and message formats!
    *
    * The `delta` commands typically have the following json format:
-   * ```{state: newState}```
+   * `{state: newState}`
    * 
    * The `cmd` commands typically have the following json format:
-   * ```{command: command, time: Date.now() / 1000 | 0, initiator: 'localApp'};```
+   * `{command: command, time: Date.now() / 1000 | 0, initiator: 'localApp'};`
    * 
    * @example For example to send a clean command:
-   * ```
+   * ```javascript
    * let myCommand = {command: 'clean', time: Date.now() / 1000 | 0, initiator: 'localApp'};
    *
    * myRobotViaLocal.publish('cmd', JSON.stringify(myCommand), function(e) {
@@ -313,7 +323,7 @@ interface RobotState {
     rechrgTm: number,
     mssnStrtTm: number,
     operatingMode: number,
-    initiator: '' | 'manual' | 'localApp' | string,
+    initiator: initiator,
     nMssn: number,
     missionId: string;
   },
@@ -369,69 +379,12 @@ interface RobotState {
   langs2: {
     sVer: '1.0' | string,
     dLangs: {
-      ver: '0.35' | string, langs: ['ar-SA_1',
-        'ar-SA_2',
-        'cs-CZ_1',
-        'cs-CZ_2',
-        'da-DK_1',
-        'da-DK_2',
-        'de-DE_1',
-        'de-DE_2',
-        'en-GB_1',
-        'en-GB_2',
-        'en-US_1',
-        'en-US_2',
-        'es-ES_1',
-        'es-ES_2',
-        'es-XL_1',
-        'es-XL_2',
-        'fi-FI_1',
-        'fi-FI_2',
-        'fr-CA_1',
-        'fr-CA_2',
-        'fr-FR_1',
-        'fr-FR_2',
-        'he-IL_1',
-        'he-IL_2',
-        'it-IT_1',
-        'it-IT_2',
-        'ja-JP_1',
-        'ja-JP_2',
-        'ko-KR_1',
-        'ko-KR_2',
-        'nb-NO_1',
-        'nb-NO_2',
-        'nl-NL_1',
-        'nl-NL_2',
-        'pl-PL_1',
-        'pl-PL_2',
-        'pt-BR_1',
-        'pt-BR_2',
-        'pt-PT_1',
-        'pt-PT_2',
-        'ru-RU_1',
-        'ru-RU_2',
-        'sv-SE_1',
-        'sv-SE_2',
-        'tr-TR_1',
-        'tr-TR_2',
-        'zh-CN_1',
-        'zh-CN_2',
-        'zh-HK_1',
-        'zh-HK_2',
-        'zh-TW_1',
-        'zh-TW_2'] | string[];
+      ver: '0.35' | string, langs: langs;
     },
-    sLang: 'en-US_1' | string;/*Pick<Pick<Pick<RobotState, 'langs2'>, 'dlangs'>, 'langs'[number]>*/
+    sLang: langs[number];
     aSlots: number;
   },
-  lastCommand: { command: 'none' | 'evac' | string, time: number, initiator: Pick<Pick<RobotState, 'cleanMissionStatus'>, 'initiator'[number]>; } | {
-    pmap_id: string | null;
-    regions: {
-      region_id: string; type: 'rid' | 'zid';
-    }[] | null;
-    user_pmapv_id: string | null;
-  } | null | Record<string, any>,
+  lastCommand: { command: 'none' | 'evac' | string, time: number, initiator: initiator; } | Map | null | Record<string, any>,
   lastDisconnect: number,
   mapUploadAllowed: boolean,
   missionTelemetry: {
