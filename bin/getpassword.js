@@ -5,7 +5,7 @@
 const request = require('request');
 const tls = require('tls');
 const discovery = require('../lib/discovery');
-const { constants } = require('crypto')
+const { constants } = require('crypto');
 
 if (!process.argv[2]) {
   console.log('Usage: npm run getpassword <robot_ip_address> [firmware version]');
