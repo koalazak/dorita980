@@ -5,6 +5,7 @@
 const request = require('request');
 const tls = require('tls');
 const discovery = require('../lib/discovery');
+const { constants } = require('crypto')
 
 if (!process.argv[2]) {
   console.log('Usage: npm run getpassword <robot_ip_address> [firmware version]');
@@ -88,7 +89,7 @@ function checkV2 () {
     console.log(robotData);
   });
   const packet = 'f005efcc3b2900';
-  var client = tls.connect(8883, host, {timeout: 10000, rejectUnauthorized: false, ciphers: process.env.ROBOT_CIPHERS || 'AES128-SHA256'}, function () {
+  var client = tls.connect(8883, host, {timeout: 10000, rejectUnauthorized: false, ciphers: process.env.ROBOT_CIPHERS || 'AES128-SHA256', secureOptions: constants.SSL_OP_LEGACY_SERVER_CONNECT}, function () {
     client.write(new Buffer(packet, 'hex'));
   });
 
