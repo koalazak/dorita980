@@ -7,12 +7,12 @@ import { Local as LocalV3 } from './V3/local';
 
 
 
-export function Cloud(username: string, password: string, version?: number): CloudV2 | CloudV3;
+export function Cloud(username: string, password: string, version?: number): Partial<CloudV2 & CloudV3> & (CloudV2 | CloudV3);
 export function Cloud(username: string, password: string, version: 1): CloudV1;
 export function Cloud(username: string, password: string, version: 2): CloudV2;
 export function Cloud(username: string, password: string, version: 3): CloudV3;
 
-export function Local(blid: string, password: string, ip: string, version?: number, interval?: number): LocalV2 | LocalV3;
+export function Local(blid: string, password: string, ip: string, version?: number, interval?: number): Partial<LocalV2 & LocalV3> & (LocalV2 | LocalV3);
 export function Local(blid: string, password: string, ip: string, version: 1): LocalV1;
 export function Local(blid: string, password: string, ip: string, version: 2, interval?: number): LocalV2;
 export function Local(blid: string, password: string, ip: string, version: 3, interval?: number): LocalV3;
