@@ -89,7 +89,7 @@ export class Local {
    * });
    * ```
    */
-  getRobotState<WaitForFields extends (keyof RobotState)[]>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields[number]>>;
+  getRobotState<WaitForFields extends (keyof RobotState)[]>(waitForFields: WaitForFields): Promise<Partial<RobotState> & Pick<RobotState, WaitForFields[number]>>;
   /**
  * Get the robot state but wait for the `waitForFields` fields before return.
  * 
@@ -101,7 +101,7 @@ export class Local {
  * });
  * ```
  */
-  getRobotState<WaitForFields extends (keyof RobotState)>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields>>;
+  getRobotState<WaitForFields extends (keyof RobotState)>(waitForFields: WaitForFields): Promise<Partial<RobotState> & Pick<RobotState, WaitForFields>>;
 
   /**
  * Get the robot state but wait for the `waitForFields` fields before return.
@@ -114,7 +114,7 @@ export class Local {
  * });
  * ```
  */
-  getRobotState(): Promise<{}>;
+  getRobotState(): Promise<Partial<RobotState>>;
   /**
    * With this you can draw a map :) in models with position reporting. Use {@link getBasicMission()} in robots without position reporting feature like E5 models.
    */
