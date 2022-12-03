@@ -9,10 +9,10 @@ export class Local {
    * While dorita980 is connected, you can call other methods to send commands and listen for the events to get data. Just call the {@link end()} method if you want. While dorita980 is connected, the official mobile app will only work via the cloud to send commands to your robot.
    */
   end(): void;
-  getTime(): Promise<never>;
+  //getTime(): Promise<never>;
   getBbrun(): Promise<RobotState['bbrun']>;
-  getLangs(): Promise<never>;
-  getSys(): Promise<never>;
+  //getLangs(): Promise<never>;
+  //getSys(): Promise<never>;
   getWirelessLastStatus(): Promise<{ wifistat: RobotState['wifistat'], wlcfg: RobotState['wlcfg']; }>;
   /**
      * @example starts every day at `10:30am` except Monday:
@@ -23,11 +23,7 @@ export class Local {
      * },
      * ```
      */
-  getWeek(): Promise</*{
-    cycle: ['start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string, 'start' | 'none' | string],
-    h: [number, number, number, number, number, number, number],
-    m: [number, number, number, number, number, number, number];
-  }*/never>;
+  //getWeek(): Promise<never>;
   /**
    * Get the full robot state but wait for the `['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'pose']` fields before returning.
    *
@@ -37,7 +33,7 @@ export class Local {
    *
    * Use {@link getRobotState() getRobotState(['cleanMissionStatus', 'cleanSchedule', 'name', 'vacHigh', 'signal'])} without `pose` in models without navigation like E6 models.
    */
-  getPreferences(): Promise</*RobotState['c]eanMissionStatus' | 'cleanSchedule' | 'name' | 'vacHigh' | 'pose'>*/ never>;
+  //getPreferences(): Promise</*RobotState['c]eanMissionStatus' | 'cleanSchedule' | 'name' | 'vacHigh' | 'pose'>*/ never>;
   /**
 * Partially overwrites the robot state to configure it.
 * 
@@ -49,7 +45,7 @@ export class Local {
 * myRobotViaLocal.setPreferences(newPreferences)
 * ```
 */
-  setPreferences(newPreferences: Record<string, any>): Promise<{ ok: null; }>;
+  //setPreferences(newPreferences: Record<string, any>): Promise<{ ok: null; }>;
   /**
    * Get the robot state but wait for the `waitForFields` fields before return.
    * 
@@ -61,7 +57,7 @@ export class Local {
    * });
    * ```
    */
-  getRobotState<WaitForFields extends (keyof RobotState)[]>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields[number]>>;
+  getRobotState<WaitForFields extends (keyof RobotState)[]>(waitForFields: WaitForFields): Promise<Partial<RobotState> & Pick<RobotState, WaitForFields[number]>>;
   /**
  * Get the robot state but wait for the `waitForFields` fields before return.
  * 
@@ -73,7 +69,7 @@ export class Local {
  * });
  * ```
  */
-  getRobotState<WaitForFields extends (keyof RobotState)>(waitForFields: WaitForFields): Promise<Pick<RobotState, WaitForFields>>;
+  getRobotState<WaitForFields extends (keyof RobotState)>(waitForFields: WaitForFields): Promise<Partial<RobotState> & Pick<RobotState, WaitForFields>>;
 
   /**
  * Get the robot state but wait for the `waitForFields` fields before return.
@@ -86,7 +82,7 @@ export class Local {
  * });
  * ```
  */
-  getRobotState(): Promise<{}>;
+  getRobotState(): Promise<Partial<RobotState>>;
   /**
    * With this you can draw a map :) in models with position reporting. Use {@link getBasicMission()} in robots without position reporting feature like E5 models.
    */
@@ -155,11 +151,11 @@ export class Local {
      * myRobotViaLocal.setWeek(newWeek)
      * ```
      */
-  setWeek(week: {
+  /*setWeek(week: {
     cycle: ['start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none', 'start' | 'none'],
     h: [number, number, number, number, number, number, number],
     m: [number, number, number, number, number, number, number];
-  }): Promise<{ ok: null; }>;
+  }): Promise<{ ok: null; }>;*/
   /**
    * Just to experiment with raw commands using the MQTT client. Known topics are `cmd` and `delta`. But Experiment with other topics and message formats!
    *
