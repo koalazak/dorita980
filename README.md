@@ -69,6 +69,14 @@ First you need node.js installed and then:
 ```bash
 $ npm install dorita980 --save
 ```
+If you are using the Home Assistant OS you need to install npm with
+```bash
+$ apk add npm
+```
+then install pip with
+```bash
+$ apk add pip
+```
 
 # Quick start via Local request on your LAN
 You can control the robot from your local network.
