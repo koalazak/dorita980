@@ -908,11 +908,7 @@ myRobotViaLocal.on('state', function (data) {
 ```
 Will print the Full robot state!
 
-# Cloud API
-
-Not implemented yet in Firmware 2.0.0. [Help wanted!](https://github.com/koalazak/dorita980/issues/25)
-
-## Note for node.js v0.10 users
+# Note for node.js v0.10 users
 
 dorita980 is compatible with node.js > 4.0 But you can use the [getpassword](https://github.com/koalazak/dorita980#how-to-get-your-usernameblid-and-password) feature in node.js < 4.0 using `--harmony` flag like that:
 
@@ -920,13 +916,16 @@ dorita980 is compatible with node.js > 4.0 But you can use the [getpassword](htt
 $ node --harmony ./bin/getpassword.js "192.168.1.104"
 ```
 
-## Custom tls cipher
+# Custom tls cipher
 
 You can set `ROBOT_CIPHERS` environment variable to overwrite the cipher suit used in tls connection to the robot. Default is `AES128-SHA256`
 
 ```bash
 $ ROBOT_CIPHERS=AES128-SHA node myscript.js
 ```
+# Cloud API
+
+Not implemented yet in Firmware 2.0.0. [Help wanted!](https://github.com/koalazak/dorita980/issues/25)
 
 # Donations
 
