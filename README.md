@@ -4,7 +4,7 @@
 Unofficial iRobot Roomba (i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
 
 
-With this library you can send commands to your wifi enabled Roomba through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
+With this library you can send commands to your wifi enabled Roomba through the iRobot cloud API or directly from your LAN and integrate your robot with your own Home Automation or IoT project.
 
 See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface.
 
