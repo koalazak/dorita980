@@ -11,28 +11,41 @@ if (!process.argv[2] || !process.argv[3]) {
 
 const username = process.argv[2];
 const password = process.argv[3];
-const apiKey = process.argv[4] || process.env.GIGYA_API_KEY || '3_rWtvxmUKwgOzu3AUPTMLnM46lj-LxURGflmu5PcE_sGptTbD-wMeshVbLvYpq01K';
+const apiKeyOverride = process.argv[4] || process.env.GIGYA_API_KEY;
+const countryCode = process.env.IROBOT_COUNTRY_CODE || 'US';
+const discoveryUrl = process.env.IROBOT_DISCOVERY_URL ||
+  'https://disc-prod.iot.irobotapi.com/v1/discover/endpoints?country_code=' + countryCode;
 
-const gigyaLoginOptions = {
-  'method': 'POST',
-  'uri': 'https://accounts.us1.gigya.com/accounts.login',
-  'json': true,
-  'qs': {
-    'apiKey': apiKey,
-    'targetenv': 'mobile',
-    'loginID': username,
-    'password': password,
-    'format': 'json',
-    'targetEnv': 'mobile'
-  },
-  'headers': {
-    'Connection': 'close'
+getEndpoints(function (error, endpoints) {
+  if (error) {
+    console.log('Fatal error discovering iRobot endpoints. Please check your network or override env vars.');
+    console.log(error);
+    process.exit(1);
   }
-};
 
-request(gigyaLoginOptions, loginGigyaResponseHandler);
+  const gigyaLoginOptions = {
+    'method': 'POST',
+    'uri': endpoints.gigyaBase + '/accounts.login',
+    'json': true,
+    'form': {
+      'apiKey': endpoints.apiKey,
+      'targetenv': 'mobile',
+      'loginID': username,
+      'password': password,
+      'format': 'json',
+      'targetEnv': 'mobile'
+    },
+    'headers': {
+      'Connection': 'close'
+    }
+  };
 
-function loginGigyaResponseHandler (error, response, body) {
+  request(gigyaLoginOptions, function (err, response, body) {
+    loginGigyaResponseHandler(err, response, body, endpoints);
+  });
+});
+
+function loginGigyaResponseHandler (error, response, body, endpoints) {
   if (error) {
     console.log('Fatal error login into Gigya API. Please check your credentials or Gigya API Key.');
     console.log(error);
@@ -60,7 +73,7 @@ function loginGigyaResponseHandler (error, response, body) {
     if (body && body.statusCode && body.statusCode === 200 && body.errorCode === 0 && body.UID && body.UIDSignature && body.signatureTimestamp && body.sessionInfo && body.sessionInfo.sessionToken) {
       const iRobotLoginOptions = {
         'method': 'POST',
-        'uri': 'https://unauth2.prod.iot.irobotapi.com/v2/login',
+        'uri': endpoints.httpBase + '/v2/login',
         'json': true,
         'body': {
           'app_id': 'ANDROID-C7FB240E-DF34-42D7-AE4E-A8C17079A294',
@@ -109,3 +122,39 @@ function loginIrobotResponseHandler (error, response, body) {
   }
 }
 
+function getEndpoints (cb) {
+  if (apiKeyOverride && process.env.GIGYA_BASE && process.env.IROBOT_HTTP_BASE) {
+    return cb(null, {
+      apiKey: apiKeyOverride,
+      gigyaBase: process.env.GIGYA_BASE,
+      httpBase: process.env.IROBOT_HTTP_BASE
+    });
+  }
+  discoverEndpoints(cb);
+}
+
+function discoverEndpoints (cb) {
+  request({ method: 'GET', uri: discoveryUrl, json: true }, function (error, response, body) {
+    if (error) return cb(error);
+    if (!response || response.statusCode >= 400) return cb(body || response);
+
+    const gigya = body && body.gigya ? body.gigya : {};
+    const deployments = body && body.deployments ? body.deployments : {};
+    const apiKey = apiKeyOverride || gigya.api_key;
+    const datacenter = gigya.datacenter_domain;
+    const gigyaBase = process.env.GIGYA_BASE || (datacenter ? ('https://accounts.' + datacenter) : 'https://accounts.us1.gigya.com');
+    const httpBase = process.env.IROBOT_HTTP_BASE || pickHttpBase(deployments) || body.httpBase || 'https://unauth2.prod.iot.irobotapi.com';
+
+    if (!apiKey) return cb(new Error('No Gigya API key in discovery response'));
+    cb(null, { apiKey: apiKey, gigyaBase: gigyaBase, httpBase: httpBase });
+  });
+}
+
+function pickHttpBase (deployments) {
+  const keys = Object.keys(deployments || {}).sort().reverse();
+  for (var i = 0; i < keys.length; i++) {
+    const dep = deployments[keys[i]];
+    if (dep && dep.httpBase) return dep.httpBase;
+  }
+  return null;
+}
