@@ -1,7 +1,7 @@
 # dorita980
 [![npm version](https://badge.fury.io/js/dorita980.svg)](http://badge.fury.io/js/dorita980)
 
-Unofficial iRobot Roomba (i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
+Unofficial iRobot Roomba (Combo 10 Max, j7, i7/i7+, 980, 960, e5, 690, 675, etc) node.js library (SDK).
 
 
 With this library you can send commands to your wifi enabled Roomba through the iRobot cloud API or directly from your LAN and integrate your roboot with your own Home Automation or IoT project.
@@ -20,7 +20,6 @@ If you have firmware version 1.6.x [click here](https://github.com/koalazak/dori
 
 # Features
 
-- Compatible robots: all 600, 800, 900, e5 and i7/i7+ series with HOME app and Braava m6.
 - Get your username/password easily.
 - Auto discovery robot IP (optional).
 - Local API control (from your LAN).
@@ -30,34 +29,52 @@ If you have firmware version 1.6.x [click here](https://github.com/koalazak/dori
 - Firmware 3.2.x compatible (latest serie 800 uses firmware v3).
 - See [rest980](https://github.com/koalazak/rest980) if you need a HTTP REST API interface to use dorita980 through it.
 
-Latest firmware tested and working: `v2.4.16-126`
+## Supported Robots and Protocols
+
+dorita980 targets the local MQTT/TLS protocol used by older Wi‑Fi Roombas. Known working families include:
+
+- Roomba 600, 800, and 900 series (e.g. 675, 690, 960, 980), etc.
+- Roomba e and i series (e5, i7/i7+), J series, etc.
+- Braava m6, etc.
+- Roomba Combo 10 Max, etc.
+
+V4 protocol robots are **work in progress** and not yet supported here. These include newer Matter‑first models such as Combo Max 705 and other recent devices. For now, use dorita980 only with the v1/v2/v3 firmware families listed above.
+
+## Node.js / TLS compatibility
+
+Newer Node.js/OpenSSL versions disable legacy TLS renegotiation by default, which can break local connections to some robots. dorita980 now enables legacy renegotiation when available. You can override behavior with:
+
+- `ROBOT_TLS_LEGACY=0` to disable legacy renegotiation
+- `ROBOT_CIPHERS` to provide a custom cipher list for MQTT/TLS
 
 [![iRobot Roomba 980 cleaning map using dorita980 lib](https://img.youtube.com/vi/XILvHFEX7TM/0.jpg)](https://www.youtube.com/watch?v=XILvHFEX7TM)
 
 Video: Realtime cleaning map using dorita980 lib in [rest980](https://github.com/koalazak/rest980).
 
-## Supported Features by Firmware Version
+## Supported Features by Firmware Version (v1/v2/v3)
 
-|                                             | 1.6.x Local | 1.6.x Cloud   |  2.x.x Local  |2.x.x Cloud | 3.x.x Local |
-|---------------------------------------------|-------------|---------------|---------------|---------|--------| 
-| Clean/Start/Stop/Pause/Dock/Resume/CleanRoom/Find| yes         | yes           | yes           | pending | yes    |
-| Get Preferences                             | yes         | yes           | yes           | pending | yes    |
-| Set Preferences                             | yes         | yes           | yes           | pending | yes    |
-| Get x,y,d Position                          | yes         | yes           | yes           | pending | -      |
-| Get Mission                                 | yes         | yes           | yes           | pending | yes    |
-| Get Mission number                          | no          | no            | yes           | pending | yes    |
-| Get General Info                            | yes         | yes           | yes           | pending | yes    |
-| Get Schedule                                | yes         | yes           | yes           | pending | yes    |
-| Set Schedule                                | yes         | yes           | yes           | pending | yes    |
-| Set CarpetBoost (performance, eco, auto)    | yes         | yes           | yes           | pending | -      |
-| Set Edge Clean                              | yes         | yes           | yes           | pending | -      |
-| Set Cleaning Passes (auto, on, two)         | yes         | yes           | yes           | pending | -      |
-| set Always Finish                           | yes         | yes           | yes           | pending | -      |
-| MQTT Custom events                          | -           | -             | yes           | pending | yes    |
-| HTTP API                                    | yes         | yes           | -             | -       | -      |
-| Discovery Robot IP                          | yes         | -             | yes           | -       | yes    |
-| Get BLID and Password                       | yes         | -             | yes           | -       | yes    |
-| Support multiples clients at the same time  | yes         | yes           | no            | pending | no     |
+|                                             | 1.6.x Local | 1.6.x Cloud | 2.x.x Local | 2.x.x Cloud | 3.x.x Local |
+|---------------------------------------------|-------------|-------------|-------------|-------------|-------------|
+| Clean/Start/Stop/Pause/Dock/Resume/CleanRoom/Find | yes | yes | yes | pending | yes |
+| Get Preferences                             | yes         | yes         | yes         | pending     | yes         |
+| Set Preferences                             | yes         | yes         | yes         | pending     | yes         |
+| Get x,y,d Position                          | yes         | yes         | yes         | pending     | -           |
+| Get Mission                                 | yes         | yes         | yes         | pending     | yes         |
+| Get Mission number                          | no          | no          | yes         | pending     | yes         |
+| Get General Info                            | yes         | yes         | yes         | pending     | yes         |
+| Get Schedule                                | yes         | yes         | yes         | pending     | yes         |
+| Set Schedule                                | yes         | yes         | yes         | pending     | yes         |
+| Set CarpetBoost (performance, eco, auto)    | yes         | yes         | yes         | pending     | -           |
+| Set Edge Clean                              | yes         | yes         | yes         | pending     | -           |
+| Set Cleaning Passes (auto, on, two)         | yes         | yes         | yes         | pending     | -           |
+| set Always Finish                           | yes         | yes         | yes         | pending     | -           |
+| MQTT Custom events                          | -           | -           | yes         | pending     | yes         |
+| HTTP API                                    | yes         | yes         | -           | -           | -           |
+| Discovery Robot IP                          | yes         | -           | yes         | -           | yes         |
+| Get BLID and Password                       | yes         | -           | yes         | -           | yes         |
+| Support multiples clients at the same time  | yes         | yes         | no          | pending     | no          |
+
+Note: v4 protocol robots are not covered by this table (WIP).
 
 Note: some new firmwares are not reporting robot position ('pose' property) to local env.
 
@@ -158,6 +175,14 @@ $ cd dorita980
 $ npm install
 $ npm run get-password-cloud <iRobot Username> <iRobot Password> [Optional API-Key]
 ```
+
+You can override discovery/auth endpoints if needed:
+
+- `GIGYA_API_KEY` (override Gigya API key)
+- `GIGYA_BASE` (override Gigya base URL, e.g. `https://accounts.us1.gigya.com`)
+- `IROBOT_HTTP_BASE` (override iRobot HTTP base, e.g. `https://unauth2.prod.iot.irobotapi.com`)
+- `IROBOT_COUNTRY_CODE` (default `US`)
+- `IROBOT_DISCOVERY_URL` (override discovery URL entirely)
 
 ** Option 3 **
 

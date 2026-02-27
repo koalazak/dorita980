@@ -4,6 +4,7 @@
 
 const request = require('request');
 const tls = require('tls');
+const { constants } = require('crypto');
 const discovery = require('../lib/discovery');
 
 if (!process.argv[2]) {
@@ -88,7 +89,16 @@ function checkV2 () {
     console.log(robotData);
   });
   const packet = 'f005efcc3b2900';
-  var client = tls.connect(8883, host, {timeout: 10000, rejectUnauthorized: false, ciphers: process.env.ROBOT_CIPHERS || 'AES128-SHA256'}, function () {
+  var tlsOptions = {
+    timeout: 10000,
+    rejectUnauthorized: false,
+    ciphers: process.env.ROBOT_CIPHERS || 'AES128-SHA256,TLS_AES_256_GCM_SHA384'
+  };
+  if (process.env.ROBOT_TLS_LEGACY !== '0' && constants && constants.SSL_OP_LEGACY_SERVER_CONNECT) {
+    tlsOptions.secureOptions = constants.SSL_OP_LEGACY_SERVER_CONNECT;
+  }
+
+  var client = tls.connect(8883, host, tlsOptions, function () {
     client.write(new Buffer(packet, 'hex'));
   });
 
